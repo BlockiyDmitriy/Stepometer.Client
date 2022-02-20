@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ContentView 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Stepometer.Models;assembly=Stepometer"
+             x:Class="Stepometer.Controls.ExpanderContentView"
+             x:Name="View">
+
+    <ContentView.Resources>
+        <DataTemplate
+            x:Key="ItemTemplate"
+            x:DataType="models:StepometerModel">
+            <Grid
+                ColumnDefinitions="*,auto,3.5*"
+                Padding="10,10,10,10">
+                <Label
+                    Grid.Column="0"
+                    Text="{Binding Time, StringFormat='{0:dd}'}"
+                    Style="{StaticResource MainLabel}"
+                    FontSize="30"
+                    VerticalOptions="CenterAndExpand"
+                    HorizontalOptions="StartAndExpand" />
+                <Label
+                    Grid.Column="0"
+                    Text="{Binding Time, StringFormat='{0:MMMM}'}"
+                    Style="{StaticResource MainLabel}"
+                    TextColor="{StaticResource SecondMainAppColor}"
+                    FontSize="16"
+                    VerticalOptions="EndAndExpand"
+                    HorizontalOptions="StartAndExpand" />
+                <BoxView
+                    Grid.Column="1"
+                    WidthRequest="1"
+                    Color="{StaticResource SecondMainAppColor}" />
+                <Grid
+                    Grid.Column="2"
+                    ColumnDefinitions="auto,*">
+                    <Label
+                        Grid.Column="0"
+                        Style="{StaticResource MainLabel}"
+                        FontAttributes="Italic">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Steps:" />
+                                <Span Text="&#10;" />
+                                <Span Text="Distance:" />
+                                <Span Text="&#10;" />
+                                <Span Text="Calories:" />
+                                <Span Text="&#10;" />
+                                <Span Text="Time activity:" />
+                                <Span Text="&#10;" />
+                                <Span Text="Average speed:" />
+                                <Span Text="&#10;" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label
+                        Grid.Column="1"
+                        Style="{StaticResource MainLabel}"
+                        FontAttributes="Italic">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span TextColor="{StaticResource SecondMainAppColor}"
+                                      Text="{Binding Steps}" />
+                                <Span Text="&#10;" />
+                                <Span TextColor="{StaticResource SecondMainAppColor}"
+                                      Text="{Binding Distance}" />
+                                <Span Text="&#10;" />
+                                <Span TextColor="{StaticResource SecondMainAppColor}"
+                                      Text="{Binding Calories}" />
+                                <Span Text="&#10;" />
+                                <Span TextColor="{StaticResource SecondMainAppColor}"
+                                      Text="{Binding Time, StringFormat='{0:HH:mm:ss}'}" />
+                                <Span Text="&#10;" />
+                                <Span TextColor="{StaticResource SecondMainAppColor}"
+                                      Text="{Binding Speed}" />
+                                <Span Text="&#10;" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+    </ContentView.Resources>
+
+    <ContentView.Content>
+        <StackLayout
+            BindableLayout.ItemsSource="{Binding Source={x:Reference View}, Path=ItemsSource}"
+            BindableLayout.ItemTemplate="{StaticResource ItemTemplate}" />
+    </ContentView.Content>
+</ContentView>

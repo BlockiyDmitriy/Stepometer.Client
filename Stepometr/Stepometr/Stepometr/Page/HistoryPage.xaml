@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:Stepometer.ViewModel;assembly=Stepometer"
+             xmlns:models="clr-namespace:Stepometer.Models;assembly=Stepometer"
+             xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:views="clr-namespace:Stepometer.Controls;assembly=Stepometer"
+             xmlns:segment="clr-namespace:Plugin.Segmented.Control;assembly=Plugin.Segmented"
+             xmlns:utils="clr-namespace:Stepometer.Utils;assembly=Stepometer"
+             x:Class="Stepometer.Page.HistoryPage"
+             x:DataType="viewModel:HistoryViewModel"
+             BackgroundColor="{StaticResource MainBackgroundAppColor}"
+             x:Name="View">
+
+    <ContentPage.Resources>
+        <DataTemplate
+            x:Key="HistoryViewTemplate"
+            x:DataType="models:ExpanderHistoryModel">
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Grid RowDefinitions="*,auto">
+                        <Label
+                            Grid.Row="0"
+                            Text="{Binding Title}"
+                            Style="{StaticResource MainLabel}"
+                            FontAttributes="Italic"
+                            FontSize="Title" />
+                        <BoxView
+                            Grid.Row="1"
+                            HeightRequest="0.1"
+                            Color="{StaticResource SecondMainAppColor}" />
+                    </Grid>
+                </toolkit:Expander.Header>
+                <toolkit:Expander.ContentTemplate>
+                    <DataTemplate>
+                        <views:ExpanderContentView ItemsSource="{Binding ExpanderContent}" />
+                    </DataTemplate>
+                </toolkit:Expander.ContentTemplate>
+            </toolkit:Expander>
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,25,10">
+            <Label
+                Grid.Column="0"
+                Style="{StaticResource MainLabel}"
+                Text="History"
+                VerticalOptions="Center"
+                HorizontalOptions="Center" />
+            <Image
+                Grid.Column="1"
+                Source="{Binding Source={x:Static utils:EmbeddedImages.Trophy},
+                                 Converter={StaticResource EmbeddedToImageSourceConverter}}"
+                BackgroundColor="Transparent"
+                HorizontalOptions="EndAndExpand"
+                Aspect="AspectFit">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OpenAchievePageCommand}" />
+                </Image.GestureRecognizers>
+            </Image>
+        </Grid>
+    </Shell.TitleView>
+
+    <ContentPage.Content>
+        <Grid
+            x:Name="MainGrid"
+            ColumnDefinitions="*"
+            RowDefinitions="auto,*"
+            Padding="10,20,10,0">
+            <Frame
+                x:Name="SegmentedFrame"
+                Grid.Row="0"
+                Grid.Column="0"
+                Style="{StaticResource FrameContainer}"
+                Padding="5">
+                <segment:SegmentedControl
+                    x:Name="SegmentedControl"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    SelectedSegment="{Binding SelectedSegment, Mode=TwoWay}"
+                    TintColor="{StaticResource SecondMainAppColor}"
+                    SelectedTextColor="{StaticResource MainTextColor}"
+                    TextColor="{StaticResource SecondMainAppColor}"
+                    BorderColor="{StaticResource SecondMainAppColor}"
+                    BorderWidth="2.0"
+                    FontSize="Small"
+                    SegmentSelectedCommand="{Binding SegmentChangedCommand}">
+                    <segment:SegmentedControl.Children>
+                        <segment:SegmentedControlOption Text="7 Days" />
+                        <segment:SegmentedControlOption Text="30 Days" />
+                        <segment:SegmentedControlOption Text="6 Month" />
+                        <segment:SegmentedControlOption Text="1 Year" />
+                    </segment:SegmentedControl.Children>
+                </segment:SegmentedControl>
+            </Frame>
+            <ScrollView
+                Grid.Row="1"
+                Grid.Column="0">
+                <Grid
+                    x:Name="ScrollViewGrid"
+                    ColumnDefinitions="auto"
+                    RowDefinitions="auto,auto">
+
+                    <views:HistoryContentView
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Items="{Binding Data}"
+                        UnusedSpace="{Binding Source={x:Reference View}, Path=VisibleContentViewHeight}" />
+                    <Frame
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Style="{StaticResource FrameContainer}">
+                        <StackLayout
+                            BindableLayout.ItemsSource="{Binding ExpanderHistory}"
+                            BindableLayout.ItemTemplate="{StaticResource HistoryViewTemplate}" />
+                    </Frame>
+                </Grid>
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

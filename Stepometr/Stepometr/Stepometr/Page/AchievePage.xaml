@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModel="clr-namespace:Stepometer.ViewModel;assembly=Stepometer"
+    xmlns:models="clr-namespace:Stepometer.Models;assembly=Stepometer"
+    xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
+    xmlns:radialProgressBar="clr-namespace:Com.Controls.RadialProgressBar;assembly=Com.Igniscor.Controls"
+    x:Class="Stepometer.Page.AchievePage"
+    BackgroundColor="{StaticResource MainBackgroundAppColor}"
+    x:DataType="viewModel:AchieveViewModel">
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="AchieveTemplate" x:DataType="models:AchieveModel">
+            <Frame 
+                Style="{StaticResource FrameContainer}"
+                Padding="10">
+                <Grid
+                    RowDefinitions="20, 20"
+                    ColumnDefinitions="50, 10, *, 40">
+                    <Image 
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Aspect="AspectFit"
+                        Source="{Binding Picture, Converter={StaticResource Base64ToImageSourceConverter}}"/>
+                    <Label 
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Style="{StaticResource MainLabel}"
+                        Text="{Binding Name}"/>
+                    <Label 
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Style="{StaticResource MainLabel}"
+                        Text="{Binding Description}"/>
+                    <Label 
+                        Grid.RowSpan="2"
+                        Grid.Column="3"
+                        Style="{StaticResource MainLabel}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Text="{Binding AmountCompleted}"/>
+                    <radialProgressBar:RadialProgressBar
+                        Grid.RowSpan="2"
+                        Grid.Column="3"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        SweepAngle="360"
+                        StartAngle="0"
+                        PercentageValue="{Binding ProgressBarCompleted}"
+                        BarWidth="5"
+                        StartColor="{StaticResource SecondMainAppColor}"
+                        EndColor="{StaticResource SecondMainAppColor}"
+                        StartBackgroundColor="{StaticResource ThirdAppColor}"
+                        EndBackgroundColor="{StaticResource ThirdAppColor}" />
+                    
+                </Grid>
+            </Frame>
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,25,10">
+            <Label
+                Grid.Column="0"
+                Style="{StaticResource MainLabel}"
+                Text="Achieve"
+                VerticalOptions="Center"
+                HorizontalOptions="Center" />
+        </Grid>
+    </Shell.TitleView>
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackButton}" />
+    </Shell.BackButtonBehavior>
+
+    <ContentPage.Content>
+        <Grid
+            RowDefinitions="*"
+            Padding="10,0">
+            <customViews:TaskLoaderView
+                Grid.Row="0"
+                TaskLoaderNotifier="{Binding AchieveLoader}">
+
+                <customViews:TaskLoaderView.EmptyView>
+                    <Label
+                        Text="Friends is not found"
+                        HorizontalTextAlignment="Center"
+                        VerticalOptions="Center" />
+                </customViews:TaskLoaderView.EmptyView>
+
+                <CollectionView
+                    ItemTemplate="{StaticResource AchieveTemplate}"
+                    ItemsSource="{Binding Achieve}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+            </customViews:TaskLoaderView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

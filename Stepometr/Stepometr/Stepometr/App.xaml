@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Application
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:Stepometer.Converter;assembly=Stepometer"
+    x:Class="Stepometer.App">
+    <Application.Resources>
+
+        <converter:EmbeddedResourceToImageSourceConverter x:Key="EmbeddedToImageSourceConverter" />
+        <converter:Base64ToImageSourceConverter x:Key="Base64ToImageSourceConverter" />
+
+        <!--Colors-->
+        <Color x:Key="MainAppColor">#212121</Color>
+        <Color x:Key="MainBackgroundAppColor">#212121</Color>
+        <Color x:Key="SecondMainAppColor">#db7900</Color>
+        <Color x:Key="SecondAppColor">#4f4f4f</Color>
+        <Color x:Key="ThirdAppColor">#707070</Color>
+        <Color x:Key="FourthAppColor">#949494</Color>
+        <Color x:Key="MainTextColor">#e8e8e8</Color>
+
+        <!--Frame-->
+        <Style x:Key="MainFrameContainer" TargetType="Frame">
+            <Setter Property="BackgroundColor" Value="{StaticResource MainAppColor}" />
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HasShadow" Value="False" />
+        </Style>
+
+        <Style x:Key="FrameContainer" TargetType="Frame" ApplyToDerivedTypes="True">
+            <Setter Property="Background">
+                <LinearGradientBrush EndPoint="1,1">
+                    <GradientStop Color="{StaticResource SecondAppColor}"
+                                  Offset="0.0" />
+                    <GradientStop Color="{StaticResource ThirdAppColor}"
+                                  Offset="0.5" />
+                    <GradientStop Color="{StaticResource SecondAppColor}"
+                                  Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HasShadow" Value="False" />
+        </Style>
+
+        <Style x:Key="FrameContainerWithSecondColor" TargetType="Frame" ApplyToDerivedTypes="True">
+            <Setter Property="Background">
+                <LinearGradientBrush EndPoint="1,1">
+                    <GradientStop Color="{StaticResource SecondMainAppColor}"
+                                  Offset="0.0" />
+                    <GradientStop Color="{StaticResource ThirdAppColor}"
+                                  Offset="0.5" />
+                    <GradientStop Color="{StaticResource SecondMainAppColor}"
+                                  Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter>
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HasShadow" Value="False" />
+        </Style>
+
+        <!--Label-->
+
+        <Style x:Key="MainLabel" TargetType="Label">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="{StaticResource MainTextColor}" />
+        </Style>
+        
+        <Style x:Key="MainBlackLabel" TargetType="Label">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="TextColor" Value="{StaticResource MainAppColor}" />
+        </Style>
+
+        <!--  BoxViews  -->
+
+        <Style x:Key="SeparatorStyle" TargetType="BoxView">
+            <Setter Property="HeightRequest" Value="1" />
+            <Setter Property="Color" Value="{StaticResource SecondAppColor}" />
+            <Setter Property="VerticalOptions" Value="End" />
+        </Style>
+
+    </Application.Resources>
+</Application>

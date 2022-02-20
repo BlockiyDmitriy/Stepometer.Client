@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:charts1="clr-namespace:Stepometer.Controls.Charts.Charts;assembly=Stepometer"
+    xmlns:charts="clr-namespace:Stepometer.Controls.Charts;assembly=Stepometer"
+    x:Class="Stepometer.Controls.HistoryContentView"
+    x:Name="View">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LabelStyleLeft" TargetType="Label" BasedOn="{StaticResource MainLabel}">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="Margin" Value="10,0,10,0" />
+            </Style>
+            <Style x:Key="LabelStyleCentre" TargetType="Label" BasedOn="{StaticResource MainLabel}">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="Margin" Value="10,0,10,0" />
+            </Style>
+            <Style x:Key="LabelStyleRight" TargetType="Label" BasedOn="{StaticResource MainLabel}">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="HorizontalOptions" Value="End" />
+                <Setter Property="Margin" Value="10,0,10,0" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <ContentView.Content>
+        <Grid
+            ColumnDefinitions="*">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="{Binding Source={x:Reference View}, Path=HeightViewGraph}" />
+            </Grid.RowDefinitions>
+
+            <Frame
+                x:Name="LabelsFrame"
+                Grid.Row="0"
+                Grid.Column="0"
+                Style="{StaticResource FrameContainer}">
+                <Grid
+                    ColumnDefinitions="*, *, *"
+                    RowDefinitions="auto, auto">
+
+                    <Label
+                        Style="{StaticResource LabelStyleLeft}"
+                        Grid.Row="0"
+                        Grid.Column="0">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Distance" />
+                                <Span Text="&#10;" />
+                                <Span TextColor="{StaticResource SecondMainAppColor}"
+                                      Text="{Binding Source={x:Reference View}, Path=AverageDistance} " />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label
+                        Style="{StaticResource LabelStyleRight}"
+                        Grid.Row="0"
+                        Grid.Column="2">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Steps" />
+                                <Span Text="&#10;" />
+                                <Span TextColor="{StaticResource SecondMainAppColor}"
+                                      Text="{Binding Source={x:Reference View}, Path=AverageSteps} " />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label
+                        Style="{StaticResource LabelStyleCentre}"
+                        VerticalOptions="Center"
+                        Grid.RowSpan="2"
+                        Grid.Column="1">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Calories" />
+                                <Span Text="&#10;" />
+                                <Span TextColor="{StaticResource SecondMainAppColor}"
+                                      Text="{Binding Source={x:Reference View}, Path=AverageCalories} " />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label
+                        Style="{StaticResource LabelStyleLeft}"
+                        Grid.Row="1"
+                        Grid.Column="0">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Time activity" />
+                                <Span Text="&#10;" />
+                                <Span TextColor="{StaticResource SecondMainAppColor}"
+                                      Text="{Binding Source={x:Reference View},  Path=AverageTimeActivity, 
+                                  StringFormat='{0:HH:mm:ss}'} " />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label
+                        Style="{StaticResource LabelStyleRight}"
+                        Grid.Row="1"
+                        Grid.Column="2">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Speed" />
+                                <Span Text="&#10;" />
+                                <Span TextColor="{StaticResource SecondMainAppColor}"
+                                      Text="{Binding Source={x:Reference View},Path= AverageSpeed} " />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Grid>
+            </Frame>
+
+            <charts:ChartView
+                x:Name="MyChart"
+                Margin="-13,0,-16,20"
+                Grid.Row="1"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                HeightRequest="{Binding Source={x:Reference View}, Path=HeightViewGraph}">
+                <charts:ChartView.Chart>
+                    <charts1:LineChart
+                        LineMode="Straight"
+                        PointMode="Circle"
+                        PointSize="16"
+                        LineSize="7"
+                        LabelTextSize="40"
+                        BindableData="{Binding Entries}" />
+
+                </charts:ChartView.Chart>
+            </charts:ChartView>
+        </Grid>
+    </ContentView.Content>
+</ContentView>

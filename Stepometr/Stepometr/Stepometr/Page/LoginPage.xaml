@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Stepometer.Page.LoginPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:customviews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
+    xmlns:viewModel="clr-namespace:Stepometer.ViewModel;assembly=Stepometer"
+    xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
+    BackgroundColor="{StaticResource MainBackgroundAppColor}"
+    Shell.NavBarIsVisible="False"
+    x:DataType="viewModel:LoginViewModel">
+    <ContentPage.Content>
+        <customviews:TaskLoaderView TaskLoaderNotifier="{Binding LoginLoader}">
+            <Frame 
+                Style="{StaticResource FrameContainerWithSecondColor}"
+                CornerRadius="100"
+                HeightRequest="180"
+                WidthRequest="180"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                toolkit:TouchEffect.IsAvailable="True"
+                toolkit:TouchEffect.PressedAnimationDuration="100"
+                toolkit:TouchEffect.NormalAnimationDuration="100"
+                toolkit:TouchEffect.PressedScale="0.9"
+                toolkit:TouchEffect.NormalScale="1"
+                toolkit:TouchEffect.PressedOpacity="0.75"
+                toolkit:TouchEffect.NormalOpacity="1">
+                <Label
+                    Style="{StaticResource MainLabel}"
+                    FontSize="30"
+                    Text="Login"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding LoginCommand}" />
+                </Frame.GestureRecognizers>
+            </Frame>
+        </customviews:TaskLoaderView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:utils="clr-namespace:Stepometer.Utils;assembly=Stepometer"
+    xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
+    x:Class="Stepometer.Views.Popup.MenuPopup">
+
+    <pages:PopupPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="MenuLabel" TargetType="Label" BasedOn="{StaticResource MainBlackLabel}">
+                <Setter Property="HorizontalOptions" Value="StartAndExpand"/>
+                <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Padding" Value="5"/>
+            </Style>
+        </ResourceDictionary>
+    </pages:PopupPage.Resources>
+
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation
+            PositionIn="Bottom"
+            PositionOut="Bottom"
+            ScaleIn="1.2"
+            ScaleOut="0.8"
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True" />
+    </pages:PopupPage.Animation>
+
+    <Frame
+        Style="{StaticResource FrameContainer}"
+        VerticalOptions="End"
+        HorizontalOptions="FillAndExpand">
+        <Grid 
+            RowDefinitions="50,50,50"
+            BackgroundColor="{StaticResource FourthAppColor}">
+            <Grid
+                Grid.Row="0"
+                ColumnDefinitions="10,30, *"
+                toolkit:TouchEffect.IsAvailable="True"
+                toolkit:TouchEffect.PressedAnimationDuration="100"
+                toolkit:TouchEffect.NormalAnimationDuration="100"
+                toolkit:TouchEffect.PressedScale="0.95"
+                toolkit:TouchEffect.NormalScale="1"
+                toolkit:TouchEffect.PressedOpacity="0.75"
+                toolkit:TouchEffect.NormalOpacity="1">
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Source="{Binding Source={x:Static utils:EmbeddedImages.Profile}, 
+                                 Converter={StaticResource EmbeddedToImageSourceConverter}}"/>
+                <Label 
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Text="Profile"
+                    Style="{StaticResource MenuLabel}"/>
+                <BoxView 
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    Style="{StaticResource SeparatorStyle}"/>
+            </Grid>
+            <Grid
+                Grid.Row="1"
+                ColumnDefinitions="10,30, *"
+                toolkit:TouchEffect.IsAvailable="True"
+                toolkit:TouchEffect.PressedAnimationDuration="100"
+                toolkit:TouchEffect.NormalAnimationDuration="100"
+                toolkit:TouchEffect.PressedScale="0.95"
+                toolkit:TouchEffect.NormalScale="1"
+                toolkit:TouchEffect.PressedOpacity="0.75"
+                toolkit:TouchEffect.NormalOpacity="1">
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Source="{Binding Source={x:Static utils:EmbeddedImages.Settings}, 
+                                 Converter={StaticResource EmbeddedToImageSourceConverter}}"/>
+                <Label 
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Text="Settings"
+                    Style="{StaticResource MenuLabel}" />
+                <BoxView 
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    Style="{StaticResource SeparatorStyle}"/>
+            </Grid>
+            <Grid
+                Grid.Row="2"
+                ColumnDefinitions="10,30, *"
+                toolkit:TouchEffect.IsAvailable="True"
+                toolkit:TouchEffect.PressedAnimationDuration="100"
+                toolkit:TouchEffect.NormalAnimationDuration="100"
+                toolkit:TouchEffect.PressedScale="0.95"
+                toolkit:TouchEffect.NormalScale="1"
+                toolkit:TouchEffect.PressedOpacity="0.75"
+                toolkit:TouchEffect.NormalOpacity="1">
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Source="{Binding Source={x:Static utils:EmbeddedImages.Info}, 
+                                 Converter={StaticResource EmbeddedToImageSourceConverter}}"/>
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Text="About"
+                    Style="{StaticResource MenuLabel}" />
+                <BoxView 
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    Style="{StaticResource SeparatorStyle}"/>
+            </Grid>
+        </Grid>
+    </Frame>
+</pages:PopupPage>

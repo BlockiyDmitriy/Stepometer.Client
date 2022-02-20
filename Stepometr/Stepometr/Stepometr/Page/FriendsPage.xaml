@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModel="clr-namespace:Stepometer.ViewModel;assembly=Stepometer"
+    xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
+    xmlns:models="clr-namespace:Stepometer.Models;assembly=Stepometer"
+    x:Class="Stepometer.Page.FriendsPage"
+    BackgroundColor="{StaticResource MainBackgroundAppColor}"
+    x:DataType="viewModel:FriendsViewModel">
+    <ContentPage.Resources>
+        <DataTemplate x:Key="FriendTemplate" x:DataType="models:FriendsModel">
+            <Frame 
+                Style="{StaticResource FrameContainer}"
+                Padding="5">
+                <Grid>
+                    <Label 
+                        Style="{StaticResource MainLabel}"
+                        Grid.Row="0"
+                        Text="{Binding Id}"/>
+                    <Label 
+                        Style="{StaticResource MainLabel}"
+                        Grid.Row="1"
+                        Text="{Binding Name}"/>
+                    <Label 
+                        Style="{StaticResource MainLabel}"
+                        Grid.Row="2"
+                        Text="{Binding SurName}"/>
+                    <Label 
+                        Style="{StaticResource MainLabel}"
+                        Grid.Row="3"
+                        Text="{Binding LastName}"/>
+                    <Label 
+                        Style="{StaticResource MainLabel}"
+                        Grid.Row="4"
+                        Text="{Binding PhoneNumber}"/>
+                </Grid>
+            </Frame>
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,25,10">
+            <Label
+                Grid.Column="0"
+                Style="{StaticResource MainLabel}"
+                Text="Friends"
+                VerticalOptions="Center"
+                HorizontalOptions="Center" />
+        </Grid>
+    </Shell.TitleView>
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding BackButton}" />
+    </Shell.BackButtonBehavior>
+
+    <ContentPage.Content>
+        <Grid
+            RowDefinitions="*"
+            Padding="10,0">
+            <customViews:TaskLoaderView
+                Grid.Row="0"
+                TaskLoaderNotifier="{Binding FriendsLoader}">
+
+                <customViews:TaskLoaderView.EmptyView>
+                    <Label
+                        Text="Friends is not found"
+                        HorizontalTextAlignment="Center"
+                        VerticalOptions="Center" />
+                </customViews:TaskLoaderView.EmptyView>
+
+                <CollectionView
+                    ItemTemplate="{StaticResource FriendTemplate}"
+                    ItemsSource="{Binding Friends}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                </CollectionView>
+            </customViews:TaskLoaderView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

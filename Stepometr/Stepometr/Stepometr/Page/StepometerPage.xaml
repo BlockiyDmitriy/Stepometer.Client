@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:radialProgressBar="clr-namespace:Com.Controls.RadialProgressBar;assembly=Com.Igniscor.Controls"
+    xmlns:progressBar="clr-namespace:Com.Igniscor.Controls.ProgressBar;assembly=Com.Igniscor.Controls"
+    xmlns:viewModel="clr-namespace:Stepometer.ViewModel;assembly=Stepometer"
+    xmlns:utils="clr-namespace:Stepometer.Utils;assembly=Stepometer"
+    xmlns:models="clr-namespace:Stepometer.Models;assembly=Stepometer"
+    xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
+    BackgroundColor="{StaticResource MainBackgroundAppColor}"
+    x:Class="Stepometer.Page.StepometerPage"
+    x:DataType="viewModel:StepometerViewModel">
+
+    <ContentPage.Resources>
+        <Style x:Key="CountStep" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource MainTextColor}" />
+            <Setter Property="FontSize" Value="48" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+        </Style>
+    </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*,10,20,10">
+            <Label
+                Grid.Column="0"
+                Style="{StaticResource MainLabel}"
+                Text="Stepometer"
+                VerticalOptions="Center"
+                HorizontalOptions="Center" />
+            <Image
+                Grid.Column="2"
+                Source="{Binding Source={x:Static utils:EmbeddedImages.MenuWhite},
+                                 Converter={StaticResource EmbeddedToImageSourceConverter}}"
+                VerticalOptions="Fill"
+                HorizontalOptions="Fill">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding OpenMenuCommand}" />
+                </Image.GestureRecognizers>
+            </Image>
+        </Grid>
+    </Shell.TitleView>
+
+    <ContentPage.Content>
+        <customViews:TaskLoaderView TaskLoaderNotifier="{Binding StepometerLoader}">
+            <Grid
+                RowDefinitions="auto,50,*"
+                Padding="10,20,10,0">
+
+                <Label
+                    Grid.Row="0" 
+                    Style="{StaticResource CountStep}"
+                    Text="{Binding StepoModel.Steps}"/>
+
+                <progressBar:DetailedProgressBar
+                    Grid.Row="1"
+                    VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand"
+                    Orientation="Horizontal"
+                    PercentageValue="{Binding ProgressBarValue}"
+                    OuterCornerRadius="10"
+                    InnerCornerRadius="10"
+                    FontSize="14"
+                    BorderWidth="5"
+                    BorderColor="{StaticResource SecondMainAppColor}"
+                    ProgressTextPosition="Attached"
+                    ProgressTextOrientation="Center"
+                    PrimaryTextColor="{StaticResource MainTextColor}"
+                    SecondaryTextColor="{StaticResource MainTextColor}"
+                    StartProgressColor="{StaticResource ThirdAppColor}"
+                    EndProgressColor="{StaticResource SecondMainAppColor}"
+                    StartBackgroundColor="{StaticResource ThirdAppColor}"
+                    EndBackgroundColor="{StaticResource ThirdAppColor}" />
+
+                <Grid
+                    x:Name="RadialProgressGrid"
+                    Grid.Row="2"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="StartAndExpand"
+                    HeightRequest="{Binding Source={RelativeSource Self}, Path=Width}">
+                    <radialProgressBar:RadialProgressBar
+                        WidthRequest="{Binding Source={x:Reference RadialProgressGrid}, Path=Width}"
+                        HeightRequest="{Binding Source={x:Reference RadialProgressGrid}, Path=Width}"
+                        SweepAngle="270"
+                        StartAngle="45"
+                        PercentageValue="0.4"
+                        BarWidth="80"
+                        StartColor="{StaticResource ThirdAppColor}"
+                        EndColor="{StaticResource SecondMainAppColor}"
+                        StartBackgroundColor="{StaticResource ThirdAppColor}"
+                        EndBackgroundColor="{StaticResource ThirdAppColor}" />
+                    <Label
+                        Text="speed"
+                        Style="{StaticResource MainLabel}"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center" />
+                </Grid>
+            </Grid>
+        </customViews:TaskLoaderView>
+    </ContentPage.Content>
+</ContentPage>
