@@ -1,5 +1,7 @@
 ﻿using Stepometer.Service;
+using Stepometer.Service.HttpApi.ConvertService;
 using Stepometer.Service.LoaclDB;
+using Stepometer.Service.LoggerService;
 using Stepometer.Service.MockServices;
 using Stepometer.Utils;
 using Xamarin.Forms;
@@ -21,11 +23,12 @@ namespace Stepometer
 
         private void RegisterDependencies()
         {
-            DependencyResolver.Register<StepometerMockService>();
+            DependencyResolver.Register<StepometerService>();
             DependencyResolver.Register<HistoryMockService>();
             DependencyResolver.Register<FriendsMockService>();
             DependencyResolver.Register<AchieveMockService>();
             DependencyResolver.Register<DBService>();
+            DependencyResolver.Register<LogService>();
         }
 
         protected override void OnStart()
