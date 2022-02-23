@@ -3,17 +3,17 @@ using Xamarin.Forms;
 
 namespace Stepometer.Service.HttpApi.ConvertService
 {
-    public abstract class AbstractService
+    public abstract class BaseService
     {
         protected string _baseUrl { get; set; } = Constants.Constants.BaseUrl;
         protected IUnitOfWork UOW { get; set; }
 
         private bool _disposed = false;
-        protected AbstractService(IUnitOfWork uOW)
+        protected BaseService(IUnitOfWork uOW)
         {
             this.UOW = uOW;
         }
-        protected AbstractService()
+        protected BaseService()
         {
             UOW ??= DependencyService.Get<IUnitOfWork>();
         }

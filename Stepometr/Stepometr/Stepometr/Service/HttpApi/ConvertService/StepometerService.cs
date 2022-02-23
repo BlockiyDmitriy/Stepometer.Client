@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Stepometer.Service.HttpApi.ConvertService
 {
-    public class StepometerModelsService : AbstractService, IStepometerModelsService
+    public class StepometerService : BaseService, IStepometerService
     {
         private readonly string _controllerUrl = Constants.Constants.StepometerControllerName;
 
-        public StepometerModelsService(IUnitOfWork uOW) : base(uOW)
+        public StepometerService(IUnitOfWork uOW) : base(uOW)
         {
         }
-        public StepometerModelsService()
+        public StepometerService()
         {
         }
 
@@ -51,7 +51,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
             GC.SuppressFinalize(this);
         }
 
-        ~StepometerModelsService()
+        ~StepometerService()
         {
             Dispose(false);
         }
