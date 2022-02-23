@@ -9,6 +9,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
     public class StepometerModelsService : AbstractService, IStepometerModelsService
     {
         private readonly string _controllerUrl = Constants.Constants.StepometerControllerName;
+
         public StepometerModelsService(IUnitOfWork uOW) : base(uOW)
         {
         }

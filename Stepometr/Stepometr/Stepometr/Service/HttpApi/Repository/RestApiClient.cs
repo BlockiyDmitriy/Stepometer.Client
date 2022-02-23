@@ -7,7 +7,9 @@ namespace Stepometer.Service.HttpApi.Repository
     public class RestApiClient<TData> : IRestApiClient<TData> where TData : class
     {
         internal HttpClient HttpClient { get; private set; }
+
         private readonly StringBuilder _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
+
         public RestApiClient(HttpClient httpClient)
         {
             HttpClient = httpClient;
@@ -25,7 +27,7 @@ namespace Stepometer.Service.HttpApi.Repository
             return null;
         }
 
-        public async void PostDataAsync(string controllerUrl, TData data)
+        public async Task PostDataAsync(string controllerUrl, TData data)
         {
             if (data != null)
             {
@@ -34,7 +36,7 @@ namespace Stepometer.Service.HttpApi.Repository
             }
         }
 
-        public async void PutDataAsync(string controllerUrl, TData data)
+        public async Task PutDataAsync(string controllerUrl, TData data)
         {
             if (data != null)
             {
@@ -43,7 +45,7 @@ namespace Stepometer.Service.HttpApi.Repository
             }
         }
 
-        public async void DeleteDataAsync(string controllerUrl, TData data)
+        public async Task DeleteDataAsync(string controllerUrl, TData data)
         {
             if (data != null)
             {

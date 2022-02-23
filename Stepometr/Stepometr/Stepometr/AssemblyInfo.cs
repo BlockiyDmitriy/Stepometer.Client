@@ -5,4 +5,4 @@ using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 [assembly: Dependency(typeof(UnitOfWork))]
-[assembly: Dependency(typeof(StepometerModelsService))]
+[assembly: Dependency(typeof(StepometerService))]

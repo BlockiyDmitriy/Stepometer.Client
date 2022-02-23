@@ -5,6 +5,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
 {
     public abstract class AbstractService
     {
+        protected string _baseUrl { get; set; } = Constants.Constants.BaseUrl;
         protected IUnitOfWork UOW { get; set; }
 
         private bool _disposed = false;
