@@ -51,7 +51,7 @@
                 <Label
                     Grid.Row="0" 
                     Style="{StaticResource CountStep}"
-                    Text="{Binding StepoModel.Steps}"/>
+                    Text="{Binding Stepometer.Steps}"/>
 
                 <progressBar:DetailedProgressBar
                     Grid.Row="1"

@@ -1,55 +1,116 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Stepometer.Service.LoggerService;
+using Stepometer.Utils;
 
 namespace Stepometer.Service.HttpApi.Repository
 {
     public class RestApiClient<TData> : IRestApiClient<TData> where TData : class
     {
+        private  ILogService _logService { get; }
+
         internal HttpClient HttpClient { get; private set; }
 
-        private readonly StringBuilder _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
+        private readonly StringBuilder _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrlDroid);
 
         public RestApiClient(HttpClient httpClient)
         {
             HttpClient = httpClient;
+            _logService = DependencyResolver.Get<ILogService>();
         }
 
         public async Task<TData> GetDataAsync(string controllerUrl)
         {
-            var response = await HttpClient.GetAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString());
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var result = SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync());
-                return result;
-            }
+                var response = await HttpClient.GetAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString());
 
-            return null;
+                await _logService.TrackResponseAsync(response);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
+
+                return SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                throw e;
+            }
         }
 
-        public async Task PostDataAsync(string controllerUrl, TData data)
+        public async Task<TData> PostDataAsync(string controllerUrl, TData data)
         {
-            if (data != null)
+            try
             {
-                await HttpClient.PostAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
+                var response = await HttpClient.PostAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
                     new StringContent(SerializeDeserialize<TData>.ConvertToJson(data)));
+
+                await _logService.TrackResponseAsync(response);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
+
+                return SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync());
             }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                throw e;
+            }
+
         }
 
-        public async Task PutDataAsync(string controllerUrl, TData data)
+        public async Task<TData> PutDataAsync(string controllerUrl, TData data)
         {
-            if (data != null)
+            try
             {
-                await HttpClient.PutAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
+                var response = await HttpClient.PutAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
                     new StringContent(SerializeDeserialize<TData>.ConvertToJson(data)));
+
+                await _logService.TrackResponseAsync(response);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
+
+                return SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                throw e;
             }
         }
 
-        public async Task DeleteDataAsync(string controllerUrl, TData data)
+        public async Task<TData> DeleteDataAsync(string controllerUrl, TData data)
         {
-            if (data != null)
+            try
             {
-                await HttpClient.DeleteAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString());
+                var response = await HttpClient.DeleteAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString());
+
+                await _logService.TrackResponseAsync(response);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
+
+                return SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync());
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                throw e;
             }
         }
     }

@@ -137,5 +137,10 @@
   <ItemGroup>
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResourceAnalysisConfig Include="Resources\xml\network_security_config.xml">
+      <SubType>Designer</SubType>
+    </AndroidResourceAnalysisConfig>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

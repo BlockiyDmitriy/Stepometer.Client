@@ -6,8 +6,8 @@ namespace Stepometer.Service.HttpApi.ConvertService.Contracts
     public interface IStepometerService
     {
         Task<StepometerModel> GetData();
-        void PostData(StepometerModel data);
-        void PutData(StepometerModel data);
-        void DeleteData(StepometerModel data);
+        Task<StepometerModel> PostData(StepometerModel data);
+        Task<StepometerModel> PutData(StepometerModel data);
+        Task<StepometerModel> DeleteData(StepometerModel data);
     }
 }

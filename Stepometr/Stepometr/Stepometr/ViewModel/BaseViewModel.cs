@@ -13,5 +13,7 @@ namespace Stepometer.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
     }
 }

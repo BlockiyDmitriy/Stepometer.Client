@@ -3,15 +3,13 @@ using SkiaSharp;
 using Stepometer.Controls.Charts;
 using Stepometer.Enum;
 using Stepometer.Models;
-using Stepometer.Service.HttpApi.ConvertService.Contracts;
+using Stepometer.Page;
 using Stepometer.Service.Interfaces;
-using Stepometer.Service.MockServices;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Stepometer.Page;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 

@@ -2,6 +2,7 @@
 using Stepometer.Service.HttpApi.ConvertService.Contracts;
 using Stepometer.Service.HttpApi.UoW;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Stepometer.Service.HttpApi.ConvertService
@@ -13,38 +14,64 @@ namespace Stepometer.Service.HttpApi.ConvertService
         public StepometerService(IUnitOfWork uOW) : base(uOW)
         {
         }
+
         public StepometerService()
         {
         }
 
         public Task<StepometerModel> GetData()
         {
-            return UOW?.StepometerRestApiClient.GetDataAsync(_controllerUrl);
-        }
-
-        public void PostData(StepometerModel data)
-        {
-            if (data != null)
+            try
             {
-                UOW?.StepometerRestApiClient.PostDataAsync(_controllerUrl, data);
+                return UOW?.StepometerRestApiClient.GetDataAsync(_controllerUrl);
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                throw e;
             }
         }
 
-        public void PutData(StepometerModel data)
+        public Task<StepometerModel> PostData(StepometerModel data)
         {
-            if (data != null)
+            try
             {
-                UOW?.StepometerRestApiClient.PutDataAsync(_controllerUrl, data);
+                return UOW?.StepometerRestApiClient.PostDataAsync(_controllerUrl, data);
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                throw e;
+            }
+
+        }
+
+        public Task<StepometerModel> PutData(StepometerModel data)
+        {
+            try
+            {
+                return UOW?.StepometerRestApiClient.PutDataAsync(_controllerUrl, data);
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                throw e;
             }
         }
 
-        public void DeleteData(StepometerModel data)
+        public Task<StepometerModel> DeleteData(StepometerModel data)
         {
-            if (data != null)
+            try
             {
-                UOW?.StepometerRestApiClient.DeleteDataAsync(_controllerUrl, data);
+                return UOW?.StepometerRestApiClient.DeleteDataAsync(_controllerUrl, data);
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                throw e;
             }
         }
+
         public void Dispose()
         {
             base.Dispose(true);
