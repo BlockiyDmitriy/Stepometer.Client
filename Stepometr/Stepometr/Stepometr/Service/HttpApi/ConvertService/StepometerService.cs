@@ -3,14 +3,13 @@ using Stepometer.Service.HttpApi.ConvertService.Contracts;
 using Stepometer.Service.HttpApi.UoW;
 using System;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Stepometer.Service.HttpApi.ConvertService
 {
     public class StepometerService : BaseService, IStepometerService
     {
-        private readonly string _controllerUrl = Constants.Constants.StepometerControllerName;
-
         public StepometerService(IUnitOfWork uOW) : base(uOW)
         {
         }
@@ -23,7 +22,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
         {
             try
             {
-                return UOW?.StepometerRestApiClient.GetDataAsync(_controllerUrl);
+                return UOW?.StepometerRestApiClient.GetDataAsync(Constants.Constants.GetDataSteps);
             }
             catch (Exception e)
             {
@@ -36,7 +35,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
         {
             try
             {
-                return UOW?.StepometerRestApiClient.PostDataAsync(_controllerUrl, data);
+                return UOW?.StepometerRestApiClient.PostDataAsync(Constants.Constants.AddDataSteps, data);
             }
             catch (Exception e)
             {
@@ -50,7 +49,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
         {
             try
             {
-                return UOW?.StepometerRestApiClient.PutDataAsync(_controllerUrl, data);
+                return UOW?.StepometerRestApiClient.PutDataAsync(Constants.Constants.UpdateDataStepsById, data);
             }
             catch (Exception e)
             {
@@ -63,7 +62,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
         {
             try
             {
-                return UOW?.StepometerRestApiClient.DeleteDataAsync(_controllerUrl, data);
+                return UOW?.StepometerRestApiClient.DeleteDataAsync(Constants.Constants.DeleteDataSteps, data);
             }
             catch (Exception e)
             {

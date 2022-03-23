@@ -15,7 +15,7 @@ namespace Stepometer.Service.HttpApi.Repository
 
         internal HttpClient HttpClient { get; private set; }
 
-        private readonly StringBuilder _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrlDroid);
+        private readonly StringBuilder _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
 
         public RestApiClient(HttpClient httpClient)
         {
