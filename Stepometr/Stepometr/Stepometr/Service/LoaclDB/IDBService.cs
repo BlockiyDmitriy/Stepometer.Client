@@ -13,8 +13,12 @@ namespace Stepometer.Service.LoaclDB
         Task<StepometerModel> SetStepometerDataAsync(StepometerModel stepometerModel);
         Task<StepometerModel> GetStepometerDataAsync();
         Task<StepometerModel> UpdateStepometerDataAsync(StepometerModel stepometerModel);
-        Task UpdateLastActivityDate(DateTimeOffset date);
 
+        #endregion
+
+        #region Last Activity Date
+        Task<DateTimeOffset> GetLastActivityDate();
+        Task UpdateLastActivityDate(DateTimeOffset date);
         #endregion
     }
 }

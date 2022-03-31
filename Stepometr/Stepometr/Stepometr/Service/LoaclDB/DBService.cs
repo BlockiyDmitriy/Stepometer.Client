@@ -100,10 +100,10 @@ namespace Stepometer.Service.LoaclDB
             }
         }
 
-        public DateTimeOffset GetLastActivityDate()
+        public Task<DateTimeOffset> GetLastActivityDate()
         {
             var activityDate = _activityDateCollection.FindOne(a => a.Id == DBHelper.ActivityDateId);
-            return activityDate == null ? default(DateTimeOffset) : activityDate.Date;
+            return Task.FromResult(activityDate == null ? default(DateTimeOffset) : activityDate.Date);
         }
     }
     public class ActivityDate

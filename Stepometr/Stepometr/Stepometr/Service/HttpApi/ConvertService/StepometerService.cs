@@ -38,7 +38,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                throw e;
+                return new List<StepometerModel>();
             }
         }
 
@@ -56,16 +56,32 @@ namespace Stepometer.Service.HttpApi.ConvertService
 
         }
 
-        public Task<List<StepometerModel>> PutData(StepometerModel data)
+        public async Task<List<StepometerModel>> PutData(StepometerModel data)
         {
             try
             {
-                return UOW?.StepometerRestApiClient.PutDataAsync(Constants.Constants.UpdateDataStepsById, data);
+                var lastActivityDate = await _dbService.GetLastActivityDate();
+
+                List<StepometerModel> results = new();
+                StepometerModel stepometerData = new();
+
+                stepometerData = await _dbService.UpdateStepometerDataAsync(data);
+                if (lastActivityDate.AddMinutes(60) >= DateTimeOffset.Now)
+                {
+                    results = await UOW?.StepometerRestApiClient.PutDataAsync(Constants.Constants.UpdateDataStepsById, data);
+                    await _dbService.UpdateLastActivityDate(DateTimeOffset.Now);
+                }
+                else
+                {
+                    results.Add(stepometerData);
+                }
+
+                return results;
             }
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                throw e;
+                return new List<StepometerModel>();
             }
         }
 
