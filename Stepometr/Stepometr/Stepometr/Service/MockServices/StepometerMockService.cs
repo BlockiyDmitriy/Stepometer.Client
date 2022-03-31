@@ -23,7 +23,7 @@ namespace Stepometer.Service.MockServices
                 Calories = 1201,
                 Speed = 5.6,
                 Steps = 0,
-                Time = DateTime.Today
+                Date = DateTime.Today
 
             };
             _stepometerModel = stepometerModel;
@@ -39,7 +39,7 @@ namespace Stepometer.Service.MockServices
                 Calories = _stepometerModel.Calories,
                 Speed = _stepometerModel.Speed,
                 Steps = steps,
-                Time = _stepometerModel.Time,
+                Date = _stepometerModel.Date,
                 LastActivityDate = DateTimeOffset.Now
             };
 

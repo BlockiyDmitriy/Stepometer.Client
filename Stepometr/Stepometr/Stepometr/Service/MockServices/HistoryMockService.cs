@@ -16,7 +16,7 @@ namespace Stepometer.Service.MockServices
                 resultData.Add(new StepometerModel
                 {
                     Steps = (long) (i % 2 == 0 ? i * 0.3d : i / 0.3d),
-                    Time = DateTime.Today.AddDays(-i),
+                    Date = DateTime.Today.AddDays(-i),
                     Calories = 1233,
                     Distance = 20000,
                     Speed = 8.3

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Stepometer.Service.HttpApi.ConvertService.Contracts;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace Stepometer.ViewModel
 {
@@ -54,7 +55,9 @@ namespace Stepometer.ViewModel
                 StepCounterService.Instance().StepsChanged += Service_StepsChanged;
 
                 await LoadStepometerFromLocalDB();
-                Stepometer = await _stepometerService.GetData();
+
+                var listData = await _stepometerService.GetData();
+                Stepometer = listData.FirstOrDefault();
 
                 IsBusy = false;
             }
@@ -85,10 +88,12 @@ namespace Stepometer.ViewModel
                 Distance = Stepometer.Distance,
                 LastActivityDate = DateTimeOffset.Now,
                 Speed = Stepometer.Speed,
-                Time = Stepometer.Time
+                Date = Stepometer.Date
             };
 
-            Stepometer = await _stepometerService.PutData(stepometer);
+            var listData = await _stepometerService.GetData();
+            Stepometer = listData.FirstOrDefault();
+
             await _dbService.UpdateStepometerDataAsync(Stepometer);
             await _dbService.UpdateLastActivityDate(DateTimeOffset.Now);
         }

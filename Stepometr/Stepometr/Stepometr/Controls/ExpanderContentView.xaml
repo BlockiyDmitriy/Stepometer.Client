@@ -16,14 +16,14 @@
                 Padding="10,10,10,10">
                 <Label
                     Grid.Column="0"
-                    Text="{Binding Time, StringFormat='{0:dd}'}"
+                    Text="{Binding Date, StringFormat='{0:dd}'}"
                     Style="{StaticResource MainLabel}"
                     FontSize="30"
                     VerticalOptions="CenterAndExpand"
                     HorizontalOptions="StartAndExpand" />
                 <Label
                     Grid.Column="0"
-                    Text="{Binding Time, StringFormat='{0:MMMM}'}"
+                    Text="{Binding Date, StringFormat='{0:MMMM}'}"
                     Style="{StaticResource MainLabel}"
                     TextColor="{StaticResource SecondMainAppColor}"
                     FontSize="16"
@@ -71,7 +71,7 @@
                                       Text="{Binding Calories}" />
                                 <Span Text="&#10;" />
                                 <Span TextColor="{StaticResource SecondMainAppColor}"
-                                      Text="{Binding Time, StringFormat='{0:HH:mm:ss}'}" />
+                                      Text="{Binding Date, StringFormat='{0:HH:mm:ss}'}" />
                                 <Span Text="&#10;" />
                                 <Span TextColor="{StaticResource SecondMainAppColor}"
                                       Text="{Binding Speed}" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Reflection;
@@ -23,7 +24,7 @@ namespace Stepometer.Service.HttpApi.Repository
             _logService = DependencyResolver.Get<ILogService>();
         }
 
-        public async Task<TData> GetDataAsync(string controllerUrl)
+        public async Task<List<TData>> GetDataAsync(string controllerUrl)
         {
             try
             {
@@ -45,7 +46,7 @@ namespace Stepometer.Service.HttpApi.Repository
             }
         }
 
-        public async Task<TData> PostDataAsync(string controllerUrl, TData data)
+        public async Task<List<TData>> PostDataAsync(string controllerUrl, TData data)
         {
             try
             {
@@ -69,7 +70,7 @@ namespace Stepometer.Service.HttpApi.Repository
 
         }
 
-        public async Task<TData> PutDataAsync(string controllerUrl, TData data)
+        public async Task<List<TData>> PutDataAsync(string controllerUrl, TData data)
         {
             try
             {
@@ -92,7 +93,7 @@ namespace Stepometer.Service.HttpApi.Repository
             }
         }
 
-        public async Task<TData> DeleteDataAsync(string controllerUrl, TData data)
+        public async Task<List<TData>> DeleteDataAsync(string controllerUrl, TData data)
         {
             try
             {

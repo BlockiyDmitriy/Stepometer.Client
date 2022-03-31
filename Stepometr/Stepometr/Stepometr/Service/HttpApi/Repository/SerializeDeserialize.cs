@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Stepometer.Service.HttpApi.Repository
 {
@@ -7,7 +8,7 @@ namespace Stepometer.Service.HttpApi.Repository
         public static string ConvertToJson(TModel self) =>
             JsonConvert.SerializeObject(self);
 
-        public static TModel ConvertFromJson(string json) =>
-            JsonConvert.DeserializeObject<TModel>(json);
+        public static List<TModel> ConvertFromJson(string json) =>
+            JsonConvert.DeserializeObject<List<TModel>>(json);
     }
 }

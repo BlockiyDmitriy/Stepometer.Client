@@ -151,7 +151,7 @@ namespace Stepometer.ViewModel
                     var firstTimeInList = data[i];
                     var daysInPeriod = period == "Week"
                         ? 7
-                        : DateTime.DaysInMonth(firstTimeInList.Time.Year, firstTimeInList.Time.Month);
+                        : DateTime.DaysInMonth(firstTimeInList.Date.Year, firstTimeInList.Date.Month);
                     for (int j = 1; j < daysInPeriod + 1; j++)
                     {
                         expanderContentMonthData.Add(data[j - 1]);
@@ -211,7 +211,7 @@ namespace Stepometer.ViewModel
                     entries.Add(new ChartEntry(model.Steps)
                     {
                         Color = SKColor.Parse("#db7900"),
-                        Label = model.Time.ToShortDateString(),
+                        Label = model.Date.ToShortDateString(),
                         TextColor = SKColors.Yellow,
                         ValueLabelColor = SKColors.White,
                     });
