@@ -91,11 +91,8 @@ namespace Stepometer.ViewModel
                 Date = Stepometer.Date
             };
 
-            var listData = await _stepometerService.GetData();
+            var listData = await _stepometerService.PutData(stepometer);
             Stepometer = listData.FirstOrDefault();
-
-            await _dbService.UpdateStepometerDataAsync(Stepometer);
-            await _dbService.UpdateLastActivityDate(DateTimeOffset.Now);
         }
         public async Task OpenMenu()
         {
