@@ -18,7 +18,6 @@ namespace Stepometer.ViewModel
     public class StepometerViewModel : BaseViewModel
     {
         private readonly IStepometerService _stepometerService;
-        private readonly IDBService _dbService;
 
         public StepometerModel Stepometer { get; set; }
         public double ProgressBarValue { get; set; }
@@ -28,7 +27,6 @@ namespace Stepometer.ViewModel
         public StepometerViewModel(IStepometerService stepometerService, IDBService dbService)
         {
             _stepometerService = stepometerService;
-            _dbService = dbService;
 
             OpenMenuCommand = new Command(async () => await OpenMenu());
             StepometerLoader = new TaskLoaderNotifier();
@@ -54,8 +52,6 @@ namespace Stepometer.ViewModel
                 
                 StepCounterService.Instance().StepsChanged += Service_StepsChanged;
 
-                await LoadStepometerFromLocalDB();
-
                 var listData = await _stepometerService.GetData();
                 Stepometer = listData.FirstOrDefault();
 
@@ -67,32 +63,30 @@ namespace Stepometer.ViewModel
                 throw;
             }
         }
-
-        private async Task LoadStepometerFromLocalDB()
-        {
-            var stepometerModel = await _dbService.GetStepometerDataAsync();
-            if (stepometerModel == null)
-            {
-                return;
-            }
-            Stepometer = stepometerModel;
-        }
         
         private async void UpdateSteps(long stepValue)
         {
-            var stepometer = new StepometerModel()
+            try
             {
-                Id = Stepometer.Id,
-                Steps = stepValue,
-                Calories = Stepometer.Calories,
-                Distance = Stepometer.Distance,
-                LastActivityDate = DateTimeOffset.Now,
-                Speed = Stepometer.Speed,
-                Date = Stepometer.Date
-            };
+                var stepometer = new StepometerModel()
+                {
+                    Id = Stepometer.Id,
+                    Steps = stepValue,
+                    Calories = Stepometer.Calories,
+                    Distance = Stepometer.Distance,
+                    LastActivityDate = DateTimeOffset.Now,
+                    Speed = Stepometer.Speed,
+                    Date = Stepometer.Date
+                };
 
-            var listData = await _stepometerService.PutData(stepometer);
-            Stepometer = listData.FirstOrDefault();
+                var listData = await _stepometerService.PutData(stepometer);
+                Stepometer = listData.FirstOrDefault();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         public async Task OpenMenu()
         {
@@ -101,9 +95,17 @@ namespace Stepometer.ViewModel
 
         private void UpdateProgressBarValue()
         {
-            ProgressBarValue = ProgressBarValue < 1
-                ? (double)Stepometer.Steps / CounterSettings.DailyStepGoalDefault
-                : 1;
+            try
+            {
+                ProgressBarValue = ProgressBarValue < 1
+                    ? (double)Stepometer?.Steps / CounterSettings.DailyStepGoalDefault
+                    : 1;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         private void Service_StepsChanged(object sender, long e)
         {

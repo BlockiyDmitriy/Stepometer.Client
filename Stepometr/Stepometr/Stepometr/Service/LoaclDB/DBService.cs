@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using LiteDB;
 using Stepometer.Models;
+using Stepometer.Service.LoggerService;
+using Stepometer.Utils;
 
 namespace Stepometer.Service.LoaclDB
 {
@@ -15,11 +18,15 @@ namespace Stepometer.Service.LoaclDB
         private readonly ILiteCollection<StepometerModel> _stepometerModel;
         private readonly ILiteCollection<ActivityDate> _activityDateCollection;
 
+        private ILogService _logService { get; set; }
+
         public DBService()
         {
             _liteDatabase = new LiteDatabase(DBHelper.DBPath);
             _stepometerModel = _liteDatabase.GetCollection<StepometerModel>(DBHelper.StepometerCollection);
             _activityDateCollection = _liteDatabase.GetCollection<ActivityDate>(DBHelper.ActivityDateId);
+
+            _logService = DependencyResolver.Get<ILogService>();
         }
 
         public Task<StepometerModel> SetStepometerDataAsync(StepometerModel stepometerModel)
@@ -41,7 +48,7 @@ namespace Stepometer.Service.LoaclDB
             try
             {
                 var data = _stepometerModel.FindAll().FirstOrDefault();
-                return Task.FromResult(data == null ? new StepometerModel() : data);
+                return Task.FromResult(data);
             }
             catch (Exception e)
             {
@@ -54,16 +61,18 @@ namespace Stepometer.Service.LoaclDB
         {
             try
             {
-                if (_stepometerModel.Update(stepometerModel))
+                var result = _stepometerModel.Update(stepometerModel);
+                if (!result)
                 {
+                    _logService.Log("Local db. Document not found");
                     _stepometerModel.Insert(stepometerModel);
                 }
                 return Task.FromResult(stepometerModel);
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
-                throw;
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                return Task.FromResult(new StepometerModel()); ;
             }
         }
 
