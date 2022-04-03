@@ -54,13 +54,15 @@ namespace Stepometer.ViewModel
 
                 var listData = await _stepometerService.GetData();
                 Stepometer = listData.FirstOrDefault();
-
-                IsBusy = false;
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e);
                 throw;
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
         
@@ -68,10 +70,17 @@ namespace Stepometer.ViewModel
         {
             try
             {
+                if (IsBusy)
+                {
+                    return;
+                }
+
+                IsBusy = true;
+
                 var stepometer = new StepometerModel()
                 {
                     Id = Stepometer.Id,
-                    Steps = stepValue,
+                    Steps = Convert.ToInt32(stepValue),
                     Calories = Stepometer.Calories,
                     Distance = Stepometer.Distance,
                     LastActivityDate = DateTimeOffset.Now,
@@ -86,6 +95,10 @@ namespace Stepometer.ViewModel
             {
 
                 throw;
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
         public async Task OpenMenu()

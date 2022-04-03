@@ -16,7 +16,7 @@ namespace Stepometer.Service.HttpApi.Repository
 
         internal HttpClient HttpClient { get; private set; }
 
-        private readonly StringBuilder _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
+        private StringBuilder _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
 
         public RestApiClient(HttpClient httpClient)
         {
@@ -50,8 +50,9 @@ namespace Stepometer.Service.HttpApi.Repository
         {
             try
             {
+                _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
                 var response = await HttpClient.PostAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
-                    new StringContent(SerializeDeserialize<TData>.ConvertToJson(data)));
+                    new StringContent(SerializeDeserialize<TData>.ConvertToJson(data), Encoding.UTF8, "application/json"));
 
                 await _logService.TrackResponseAsync(response);
 

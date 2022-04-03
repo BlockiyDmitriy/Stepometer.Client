@@ -5,14 +5,14 @@ namespace Stepometer.Models
 {
     public class StepometerModel
     {
-        public string Id { get; set; }
-        public long Steps { get; set; }
-        public double Duration { get; set; }
-        public DateTime Date { get; set; }
-        public long Distance { get; set; }
-        public long Calories { get; set; }
-        public double Speed { get; set; }
-        public DateTimeOffset LastActivityDate { get; set; }
+        public int Id { get; set; }
+        public int Steps { get; set; } = 0;
+        public double Duration { get; set; } = 0.0;
+        public DateTime Date { get; set; } = new DateTime();
+        public int Distance { get; set; } = 0;
+        public int Calories { get; set; } = 0;
+        public double Speed { get; set; } = 0.0;
+        public DateTimeOffset LastActivityDate { get; set; } = new DateTimeOffset();
         public AccModel Account { get; set; }
     }
 }
