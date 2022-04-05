@@ -45,6 +45,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
 
                     _logService.Log("Update last activity date");
                     await _dbService.UpdateLastActivityDate(DateTimeOffset.Now);
+
                 }
                 else
                 {
@@ -54,12 +55,21 @@ namespace Stepometer.Service.HttpApi.ConvertService
                     result.Add(stepometerModel);
                 }
 
+                // If the app was installed before
+                if (result.LastOrDefault()?.LastActivityDate.AddDays(1).ToUniversalTime() <= DateTime.Now.ToUniversalTime())
+                {
+                    _logService.Log("New day reset data");
+                    result = new List<StepometerModel>();
+                    result.Add(new StepometerModel());
+                    return result;
+                }
+
                 return result;
             }
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return new List<StepometerModel>();
+                return new List<StepometerModel>() { new StepometerModel() };
             }
         }
 
@@ -77,7 +87,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return new List<StepometerModel>();
+                return new List<StepometerModel>() { new StepometerModel() };
             }
 
         }
@@ -93,7 +103,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
                 StepometerModel stepometerData = new();
 
                 stepometerData = await _dbService.UpdateStepometerDataAsync(data);
-                if (lastActivityDate.AddMinutes(1).ToUniversalTime() <= DateTime.Now.ToUniversalTime())
+                if (lastActivityDate.AddMinutes(2).ToUniversalTime() <= DateTime.Now.ToUniversalTime())
                 {
                     _logService.Log("Update last activity date");
                     await _dbService.UpdateLastActivityDate(DateTimeOffset.Now);
@@ -111,7 +121,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return new List<StepometerModel>();
+                return new List<StepometerModel>() { new StepometerModel() };
             }
         }
 
@@ -124,7 +134,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                throw e;
+                return Task.FromResult(new List<StepometerModel>() { new StepometerModel() });
             }
         }
 

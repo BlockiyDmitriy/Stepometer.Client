@@ -12,21 +12,25 @@ using System.Windows.Input;
 using Stepometer.Service.HttpApi.ConvertService.Contracts;
 using Xamarin.Forms;
 using System.Linq;
+using Stepometer.Service.LoggerService;
+using System.Reflection;
 
 namespace Stepometer.ViewModel
 {
     public class StepometerViewModel : BaseViewModel
     {
         private readonly IStepometerService _stepometerService;
+        private readonly ILogService _logService;
 
         public StepometerModel Stepometer { get; set; }
         public double ProgressBarValue { get; set; }
         public ICommand OpenMenuCommand { get; }
         public TaskLoaderNotifier StepometerLoader { get; set; }
 
-        public StepometerViewModel(IStepometerService stepometerService, IDBService dbService)
+        public StepometerViewModel(IStepometerService stepometerService, IDBService dbService, ILogService logService)
         {
             _stepometerService = stepometerService;
+            _logService = logService;
 
             OpenMenuCommand = new Command(async () => await OpenMenu());
             StepometerLoader = new TaskLoaderNotifier();
@@ -57,8 +61,7 @@ namespace Stepometer.ViewModel
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
-                throw;
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
             }
             finally
             {
@@ -91,10 +94,9 @@ namespace Stepometer.ViewModel
                 var listData = await _stepometerService.PutData(stepometer);
                 Stepometer = listData.FirstOrDefault();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
             }
             finally
             {
@@ -114,10 +116,9 @@ namespace Stepometer.ViewModel
                     ? (double)Stepometer?.Steps / CounterSettings.DailyStepGoalDefault
                     : 1;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                throw;
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
             }
         }
         private void Service_StepsChanged(object sender, long e)
