@@ -56,7 +56,8 @@ namespace Stepometer.ViewModel
 
                 IsBusy = true;
                 var listData = await _stepometerService.GetData();
-                Stepometer = listData.FirstOrDefault();
+                Stepometer = listData.LastOrDefault();
+                UpdateProgressBarValue();
             }
             catch (Exception e)
             {

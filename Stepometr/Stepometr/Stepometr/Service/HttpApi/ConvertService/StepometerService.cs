@@ -108,10 +108,25 @@ namespace Stepometer.Service.HttpApi.ConvertService
                     await _dbService.UpdateLastActivityDate(DateTimeOffset.Now);
 
                     _logService.Log("Push data to the server");
-                    var res = await UOW?.StepometerRestApiClient.PostDataAsync(Constants.Constants.AddDataSteps, data);
-                    if (res is not null)
+                    var resApi = await UOW?.StepometerRestApiClient.PostDataAsync(Constants.Constants.AddDataSteps, data);
+                    var resDv = await _dbService.SetStepometerDataAsync(new StepometerModel
                     {
-                        stepometerData = res;
+                        Account = stepometerData.Account,
+                        Calories = stepometerData.Calories,
+                        Date = DateTime.Now,
+                        Distance = stepometerData.Distance,
+                        Duration = stepometerData.Duration,
+                        LastActivityDate = DateTimeOffset.Now,
+                        Speed = stepometerData.Speed,
+                        Steps = stepometerData.Steps
+                    });
+                    if (resApi is not null)
+                    {
+                        stepometerData = resApi;
+                    }
+                    else
+                    {
+                        stepometerData = resDv;
                     }
                 }
 
