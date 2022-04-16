@@ -108,7 +108,11 @@ namespace Stepometer.Service.HttpApi.ConvertService
                     await _dbService.UpdateLastActivityDate(DateTimeOffset.Now);
 
                     _logService.Log("Push data to the server");
-                    stepometerData = await UOW?.StepometerRestApiClient.PostDataAsync(Constants.Constants.AddDataSteps, data);
+                    var res = await UOW?.StepometerRestApiClient.PostDataAsync(Constants.Constants.AddDataSteps, data);
+                    if (res is not null)
+                    {
+                        stepometerData = res;
+                    }
                 }
 
                 return stepometerData;

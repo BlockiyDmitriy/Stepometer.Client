@@ -34,6 +34,8 @@ namespace Stepometer.ViewModel
 
             OpenMenuCommand = new Command(async () => await OpenMenu());
             StepometerLoader = new TaskLoaderNotifier();
+
+            StepCounterService.Instance().StepsChanged += Service_StepsChanged;
         }
 
         public Task Init()
@@ -53,9 +55,6 @@ namespace Stepometer.ViewModel
                 }
 
                 IsBusy = true;
-                
-                StepCounterService.Instance().StepsChanged += Service_StepsChanged;
-
                 var listData = await _stepometerService.GetData();
                 Stepometer = listData.FirstOrDefault();
             }
