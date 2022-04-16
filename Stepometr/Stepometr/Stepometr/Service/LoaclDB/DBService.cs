@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using LiteDB;
+﻿using LiteDB;
 using Stepometer.Models;
 using Stepometer.Service.LoggerService;
 using Stepometer.Utils;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Stepometer.Service.LoaclDB
 {
@@ -39,7 +37,7 @@ namespace Stepometer.Service.LoaclDB
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                throw;
+                return Task.FromResult(stepometerModel ?? new StepometerModel());
             }
         }
 
@@ -54,7 +52,7 @@ namespace Stepometer.Service.LoaclDB
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                throw;
+                return Task.FromResult(new StepometerModel());
             }
         }
 
@@ -73,7 +71,7 @@ namespace Stepometer.Service.LoaclDB
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return Task.FromResult(new StepometerModel()); ;
+                return Task.FromResult(stepometerModel ?? new StepometerModel());
             }
         }
 
@@ -106,7 +104,7 @@ namespace Stepometer.Service.LoaclDB
             catch (Exception e)
             {
                 Debug.WriteLine(e);
-                throw;
+                return Task.FromResult(new DateTimeOffset());
             }
         }
 
