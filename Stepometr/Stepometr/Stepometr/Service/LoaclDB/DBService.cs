@@ -47,7 +47,8 @@ namespace Stepometer.Service.LoaclDB
         {
             try
             {
-                var data = _stepometerModel.FindAll().FirstOrDefault();
+                var t = _stepometerModel.FindAll();
+                var data = _stepometerModel.FindAll().LastOrDefault();
                 return Task.FromResult(data);
             }
             catch (Exception e)

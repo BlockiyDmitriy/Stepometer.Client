@@ -73,12 +73,12 @@ namespace Stepometer.Service.HttpApi.ConvertService
             }
         }
 
-        public async Task<List<StepometerModel>> PostData(StepometerModel data)
+        public async Task<StepometerModel> PostData(StepometerModel data)
         {
             try
             {
                 var serverModel = await UOW?.StepometerRestApiClient.PostDataAsync(Constants.Constants.AddDataSteps, data);
-                await _dbService.SetStepometerDataAsync(serverModel.LastOrDefault());
+                await _dbService.SetStepometerDataAsync(serverModel);
 
                 _logService.Log("Update last activity date");
                 await _dbService.UpdateLastActivityDate(DateTimeOffset.Now);
@@ -87,19 +87,18 @@ namespace Stepometer.Service.HttpApi.ConvertService
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return new List<StepometerModel>() { new StepometerModel() };
+                return new StepometerModel();
             }
 
         }
 
-        public async Task<List<StepometerModel>> PutData(StepometerModel data)
+        public async Task<StepometerModel> PutData(StepometerModel data)
         {
             try
             {
                 var lastActivityDate = await _dbService.GetLastActivityDate();
                 _logService.Log($"Last activity date: {lastActivityDate}");
 
-                List<StepometerModel> results = new();
                 StepometerModel stepometerData = new();
 
                 stepometerData = await _dbService.UpdateStepometerDataAsync(data);
@@ -109,23 +108,19 @@ namespace Stepometer.Service.HttpApi.ConvertService
                     await _dbService.UpdateLastActivityDate(DateTimeOffset.Now);
 
                     _logService.Log("Push data to the server");
-                    results = await UOW?.StepometerRestApiClient.PostDataAsync(Constants.Constants.AddDataSteps, data);
-                }
-                else
-                {
-                    results.Add(stepometerData);
+                    stepometerData = await UOW?.StepometerRestApiClient.PostDataAsync(Constants.Constants.AddDataSteps, data);
                 }
 
-                return results;
+                return stepometerData;
             }
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return new List<StepometerModel>() { new StepometerModel() };
+                return new StepometerModel();
             }
         }
 
-        public Task<List<StepometerModel>> DeleteData(StepometerModel data)
+        public Task<StepometerModel> DeleteData(StepometerModel data)
         {
             try
             {
@@ -134,7 +129,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return Task.FromResult(new List<StepometerModel>() { new StepometerModel() });
+                return Task.FromResult(new StepometerModel());
             }
         }
 

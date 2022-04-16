@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -42,11 +43,11 @@ namespace Stepometer.Service.HttpApi.Repository
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                throw e;
+                return null;
             }
         }
 
-        public async Task<List<TData>> PostDataAsync(string controllerUrl, TData data)
+        public async Task<TData> PostDataAsync(string controllerUrl, TData data)
         {
             try
             {
@@ -61,17 +62,17 @@ namespace Stepometer.Service.HttpApi.Repository
                     throw new Exception();
                 }
 
-                return SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync());
+                return SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync()).LastOrDefault();
             }
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                throw e;
+                return null;
             }
 
         }
 
-        public async Task<List<TData>> PutDataAsync(string controllerUrl, TData data)
+        public async Task<TData> PutDataAsync(string controllerUrl, TData data)
         {
             try
             {
@@ -85,16 +86,16 @@ namespace Stepometer.Service.HttpApi.Repository
                     throw new Exception();
                 }
 
-                return SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync());
+                return SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync()).LastOrDefault();
             }
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                throw e;
+                return null;
             }
         }
 
-        public async Task<List<TData>> DeleteDataAsync(string controllerUrl, TData data)
+        public async Task<TData> DeleteDataAsync(string controllerUrl, TData data)
         {
             try
             {
@@ -107,12 +108,12 @@ namespace Stepometer.Service.HttpApi.Repository
                     throw new Exception();
                 }
 
-                return SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync());
+                return SerializeDeserialize<TData>.ConvertFromJson(await response.Content.ReadAsStringAsync()).LastOrDefault();
             }
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                throw e;
+                return null;
             }
         }
     }

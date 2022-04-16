@@ -91,8 +91,7 @@ namespace Stepometer.ViewModel
                     Date = Stepometer.Date
                 };
 
-                var listData = await _stepometerService.PutData(stepometer);
-                Stepometer = listData.FirstOrDefault();
+                Stepometer = await _stepometerService.PutData(stepometer);
             }
             catch (Exception e)
             {
