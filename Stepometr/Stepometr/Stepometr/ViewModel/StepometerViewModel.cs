@@ -27,7 +27,7 @@ namespace Stepometer.ViewModel
         public ICommand OpenMenuCommand { get; }
         public TaskLoaderNotifier StepometerLoader { get; set; }
 
-        public StepometerViewModel(IStepometerService stepometerService, IDBService dbService, ILogService logService)
+        public StepometerViewModel(IStepometerService stepometerService, ILogService logService)
         {
             _stepometerService = stepometerService;
             _logService = logService;

@@ -5,9 +5,11 @@ using Stepometer.Enum;
 using Stepometer.Models;
 using Stepometer.Page;
 using Stepometer.Service.Interfaces;
+using Stepometer.Service.LoggerService;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -17,6 +19,8 @@ namespace Stepometer.ViewModel
 {
     public class HistoryViewModel : BaseViewModel
     {
+        private readonly ILogService _logService;
+
         private IList<StepometerModel> _allDataStat;
         private IHistoryService _historyService;
 
@@ -28,8 +32,9 @@ namespace Stepometer.ViewModel
         public TaskLoaderNotifier SegmentLoader { get; set; }
         public byte SelectedSegment { get; set; }
 
-        public HistoryViewModel(IHistoryService historyService)
+        public HistoryViewModel(IHistoryService historyService, ILogService logService)
         {
+            _logService = logService;
             _historyService = historyService;
 
             Data = new ObservableRangeCollection<StepometerModel>();
@@ -90,8 +95,7 @@ namespace Stepometer.ViewModel
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
-                throw;
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
             }
         }
 
@@ -120,8 +124,7 @@ namespace Stepometer.ViewModel
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
-                throw;
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
             }
         }
 
@@ -142,7 +145,6 @@ namespace Stepometer.ViewModel
                 IList<ExpanderHistoryModel> expanderData = new List<ExpanderHistoryModel>();
                 IList<StepometerModel> expanderContentMonthData = new List<StepometerModel>();
                 IList<IList<StepometerModel>> expanderContentSplitMonthData = new List<IList<StepometerModel>>();
-
 
                 for (int i = 0;
                     i < valueCountRootExpander;
@@ -171,8 +173,8 @@ namespace Stepometer.ViewModel
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
-                throw;
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                return new List<ExpanderHistoryModel>();
             }
         }
 
@@ -191,8 +193,8 @@ namespace Stepometer.ViewModel
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
-                throw;
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                return new List<StepometerModel>();
             }
         }
 
@@ -221,8 +223,8 @@ namespace Stepometer.ViewModel
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
-                throw;
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                return new List<ChartEntry>();
             }
         }
     }
