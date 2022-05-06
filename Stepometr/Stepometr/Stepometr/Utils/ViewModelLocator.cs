@@ -10,7 +10,7 @@ namespace Stepometer.Utils
     public class ViewModelLocator
     {
         public static StartupViewModel StartupViewModel { get; set; } = new StartupViewModel();
-        public static LoginViewModel LoginViewModel { get; set; } = new LoginViewModel();
+        public static LoginViewModel LoginViewModel { get; set; } = new LoginViewModel(DependencyResolver.Get<ILogService>());
         public static StepometerViewModel StepometerViewModel { get; set; } = new StepometerViewModel(DependencyResolver.Get<IStepometerService>(), DependencyResolver.Get<ILogService>());
         public static HistoryViewModel HistoryViewModel { get; set; } = new HistoryViewModel(DependencyResolver.Get<HistoryMockService>(), DependencyResolver.Get<ILogService>());
         public static FriendsViewModel FriendsViewModel { get; set; } = new FriendsViewModel(DependencyResolver.Get<FriendsMockService>());

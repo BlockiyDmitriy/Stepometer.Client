@@ -5,29 +5,28 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:customviews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
     xmlns:viewModel="clr-namespace:Stepometer.ViewModel;assembly=Stepometer"
+    xmlns:utils="clr-namespace:Stepometer.Utils;assembly=Stepometer"
     xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
     BackgroundColor="{StaticResource MainBackgroundAppColor}"
     Shell.NavBarIsVisible="False"
     x:DataType="viewModel:LoginViewModel">
+
     <ContentPage.Content>
         <customviews:TaskLoaderView TaskLoaderNotifier="{Binding LoginLoader}">
-            <StackLayout 
-                Orientation="Vertical" 
-                Padding="30" 
-                Spacing="40">
-                <BoxView HeightRequest="10"/>
-                <Image 
-                    HorizontalOptions="Center" 
-                    WidthRequest="300" 
-                    Source="maco.jpg"/>
+            <Grid
+                RowDefinitions="10,*,*,*"
+                VerticalOptions="FillAndExpand"
+                Padding="30">
                 <Frame 
-                    BackgroundColor="#BF043055" 
+                    Grid.Row="1"
+                    Style="{StaticResource FrameContainer}"
+                    VerticalOptions="End"
                     HasShadow="False">
-                    <StackLayout 
-                        Orientation="Vertical" 
-                        Spacing="10">
+                    <Grid
+                        RowDefinitions="50,50">
                         <Entry 
                             x:Name="Email" 
+                            Grid.Row="0"
                             Text="{Binding Email}" 
                             Placeholder="Email"   
                             PlaceholderColor="White" 
@@ -36,48 +35,58 @@
                             TextColor="White"/>
                         <Entry 
                             x:Name="Password" 
+                            Grid.Row="1"
                             Text="{Binding Password}" 
                             Placeholder="Senha"
                             PlaceholderColor="White" 
                             HeightRequest="40"
                             IsPassword="True"
                             TextColor="White"/>
-                    </StackLayout>
+                    </Grid>
                 </Frame>
-                <Button 
-                    Command="{Binding LoginCommand}" 
-                    Text="Login" 
-                    TextColor="White"  
-                    FontAttributes="Bold" 
-                    FontSize="Large" 
+                <Frame                     
+                    Grid.Row="2"
+                    Style="{StaticResource FrameContainerWithSecondColor}"
+                    VerticalOptions="Center"
                     HorizontalOptions="FillAndExpand"
-                    BackgroundColor="#088da5" />
-            </StackLayout>
-            <!--<Frame 
-                Style="{StaticResource FrameContainerWithSecondColor}"
-                CornerRadius="100"
-                HeightRequest="180"
-                WidthRequest="180"
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                toolkit:TouchEffect.IsAvailable="True"
-                toolkit:TouchEffect.PressedAnimationDuration="100"
-                toolkit:TouchEffect.NormalAnimationDuration="100"
-                toolkit:TouchEffect.PressedScale="0.9"
-                toolkit:TouchEffect.NormalScale="1"
-                toolkit:TouchEffect.PressedOpacity="0.75"
-                toolkit:TouchEffect.NormalOpacity="1">
-                <Label
+                    toolkit:TouchEffect.IsAvailable="True"
+                    toolkit:TouchEffect.PressedAnimationDuration="100"
+                    toolkit:TouchEffect.NormalAnimationDuration="100"
+                    toolkit:TouchEffect.PressedScale="0.9"
+                    toolkit:TouchEffect.NormalScale="1"
+                    toolkit:TouchEffect.PressedOpacity="0.75"
+                    toolkit:TouchEffect.NormalOpacity="1">
+                    <Label
+                        Style="{StaticResource MainLabel}"
+                        FontAttributes="Bold"
+                        FontSize="30"
+                        Text="SingIn"
+                        
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding LoginCommand}" />
+                    </Frame.GestureRecognizers>
+                </Frame>
+                <Label 
+                    Grid.Row="3"
+                    VerticalOptions="EndAndExpand"
+                    HorizontalOptions="CenterAndExpand"
+                    FontSize="Large"
                     Style="{StaticResource MainLabel}"
-                    FontSize="30"
-                    Text="Login"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center" />
-
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding LoginCommand}" />
-                </Frame.GestureRecognizers>
-            </Frame>-->
+                    Text="Create new account"
+                    toolkit:TouchEffect.IsAvailable="True"
+                    toolkit:TouchEffect.PressedAnimationDuration="100"
+                    toolkit:TouchEffect.NormalAnimationDuration="100"
+                    toolkit:TouchEffect.PressedScale="0.9"
+                    toolkit:TouchEffect.NormalScale="1"
+                    toolkit:TouchEffect.PressedOpacity="0.75"
+                    toolkit:TouchEffect.NormalOpacity="1">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CreateNewAccountCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
         </customviews:TaskLoaderView>
     </ContentPage.Content>
 </ContentPage>
