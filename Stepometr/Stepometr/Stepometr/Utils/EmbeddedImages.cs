@@ -6,7 +6,6 @@
 
         public const string Profile = BasePath + "account.png";
         public const string Burger = BasePath + "menu.png";
-        public const string BackLogo = BasePath + "back_logo.png";
         public const string Friend = BasePath + "friendsWhite.png";
         public const string History = BasePath + "historyWhite.png";
         public const string Info = BasePath + "info.png";
