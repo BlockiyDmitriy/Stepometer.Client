@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:utils="clr-namespace:Stepometer.Utils;assembly=Stepometer"
+    xmlns:toolkit="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    x:Class="Stepometer.Views.Popup.CreateAccountPopup">
+    
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8"
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True" />
+    </pages:PopupPage.Animation>
+
+    <Frame
+        Style="{StaticResource FrameContainer}"
+        HorizontalOptions="CenterAndExpand"
+        VerticalOptions="CenterAndExpand">        
+        <Grid
+            RowDefinitions="*,*"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+            <Frame 
+                Grid.Row="0"
+                Style="{StaticResource FrameContainer}"
+                VerticalOptions="End"
+                HasShadow="False">
+                <Grid RowDefinitions="50,50">
+                    <Entry 
+                        x:Name="Email" 
+                        Grid.Row="0"
+                        Text="{Binding Email}" 
+                        Placeholder="Email"   
+                        PlaceholderColor="White" 
+                        HeightRequest="40"   
+                        Keyboard="Email"  
+                        TextColor="White"/>
+                    <Entry 
+                        x:Name="Password" 
+                        Grid.Row="1"
+                        Text="{Binding Password}" 
+                        Placeholder="Senha"
+                        PlaceholderColor="White" 
+                        HeightRequest="40"
+                        IsPassword="True"
+                        TextColor="White"/>
+                </Grid>
+            </Frame>
+            <Frame                     
+                Grid.Row="1"
+                Style="{StaticResource FrameContainerWithSecondColor}"
+                VerticalOptions="Center"
+                HorizontalOptions="FillAndExpand"
+                toolkit:TouchEffect.IsAvailable="True"
+                toolkit:TouchEffect.PressedAnimationDuration="100"
+                toolkit:TouchEffect.NormalAnimationDuration="100"
+                toolkit:TouchEffect.PressedScale="0.9"
+                toolkit:TouchEffect.NormalScale="1"
+                toolkit:TouchEffect.PressedOpacity="0.75"
+                toolkit:TouchEffect.NormalOpacity="1">
+                <Label
+                    Style="{StaticResource MainLabel}"
+                    FontAttributes="Bold"
+                    FontSize="30"
+                    Text="Create"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CreateAccountCommand}" />
+                </Frame.GestureRecognizers>
+            </Frame>
+        </Grid>
+    </Frame>
+
+</pages:PopupPage>

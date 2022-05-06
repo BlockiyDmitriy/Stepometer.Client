@@ -11,6 +11,8 @@ using Xamarin.Forms;
 using System.Windows.Input;
 using Stepometer.Service.LoggerService;
 using System.Reflection;
+using Rg.Plugins.Popup.Services;
+using Stepometer.Views.Popup;
 
 namespace Stepometer.ViewModel
 {
@@ -20,10 +22,10 @@ namespace Stepometer.ViewModel
 
         public Action DisplayInvalidLoginPrompt;
 
-        public Command LoginCommand { get; }
         public TaskLoaderNotifier LoginLoader { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public ICommand LoginCommand { get; }
         public ICommand SubmitCommand { protected set; get; }
         public ICommand CreateNewAccountCommand { get; }
         public LoginViewModel(ILogService logService)
@@ -50,7 +52,6 @@ namespace Stepometer.ViewModel
             }
         }
 
-  
         public Task OnSubmit()
         {
             if (Email != "macoratti@yahoo.com" || Password != "secret")
@@ -60,17 +61,15 @@ namespace Stepometer.ViewModel
             return Task.CompletedTask;
         }
 
-        public Task CreateNewAccount()
+        public async Task CreateNewAccount()
         {
             try
             {
-
-                return Task.CompletedTask;
+                await PopupNavigation.Instance.PushAsync(new CreateAccountPopup());
             }
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return Task.CompletedTask;
             }
         }
     }

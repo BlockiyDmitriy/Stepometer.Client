@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <None Remove="Images\account.png" />
-    <None Remove="Images\back_logo.png" />
     <None Remove="Images\friendsWhite.png" />
     <None Remove="Images\historyWhite.png" />
     <None Remove="Images\info.png" />
@@ -58,7 +57,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Images\account.png" />
-    <EmbeddedResource Include="Images\back_logo.png" />
     <EmbeddedResource Include="Images\friendsWhite.png" />
   </ItemGroup>
 
@@ -95,6 +93,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Page\LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Popup\CreateAccountPopup.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Popup\MenuPopup.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
