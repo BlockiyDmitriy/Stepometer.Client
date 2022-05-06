@@ -16,5 +16,7 @@ namespace Stepometer.Service.LoaclDB
                 Environment.SpecialFolder.Resources), DBName);
         public static string StepometerCollection = "stepometer";
         public static string ActivityDateId = "activityDate";
+
+        public static string LoginCollection = "loginData";
     }
 }

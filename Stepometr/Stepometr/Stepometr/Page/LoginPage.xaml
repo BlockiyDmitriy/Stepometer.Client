@@ -11,7 +11,49 @@
     x:DataType="viewModel:LoginViewModel">
     <ContentPage.Content>
         <customviews:TaskLoaderView TaskLoaderNotifier="{Binding LoginLoader}">
-            <Frame 
+            <StackLayout 
+                Orientation="Vertical" 
+                Padding="30" 
+                Spacing="40">
+                <BoxView HeightRequest="10"/>
+                <Image 
+                    HorizontalOptions="Center" 
+                    WidthRequest="300" 
+                    Source="maco.jpg"/>
+                <Frame 
+                    BackgroundColor="#BF043055" 
+                    HasShadow="False">
+                    <StackLayout 
+                        Orientation="Vertical" 
+                        Spacing="10">
+                        <Entry 
+                            x:Name="Email" 
+                            Text="{Binding Email}" 
+                            Placeholder="Email"   
+                            PlaceholderColor="White" 
+                            HeightRequest="40"   
+                            Keyboard="Email"  
+                            TextColor="White"/>
+                        <Entry 
+                            x:Name="Password" 
+                            Text="{Binding Password}" 
+                            Placeholder="Senha"
+                            PlaceholderColor="White" 
+                            HeightRequest="40"
+                            IsPassword="True"
+                            TextColor="White"/>
+                    </StackLayout>
+                </Frame>
+                <Button 
+                    Command="{Binding LoginCommand}" 
+                    Text="Login" 
+                    TextColor="White"  
+                    FontAttributes="Bold" 
+                    FontSize="Large" 
+                    HorizontalOptions="FillAndExpand"
+                    BackgroundColor="#088da5" />
+            </StackLayout>
+            <!--<Frame 
                 Style="{StaticResource FrameContainerWithSecondColor}"
                 CornerRadius="100"
                 HeightRequest="180"
@@ -35,7 +77,7 @@
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding LoginCommand}" />
                 </Frame.GestureRecognizers>
-            </Frame>
+            </Frame>-->
         </customviews:TaskLoaderView>
     </ContentPage.Content>
 </ContentPage>
