@@ -125,6 +125,7 @@ namespace Stepometer.Service.LoaclDB
                 
                 if (existLoginData.Any())
                 {
+                    existLoginData.FirstOrDefault().IsExistAccount = true;
                     return Task.FromResult(existLoginData.FirstOrDefault());
                 }
 

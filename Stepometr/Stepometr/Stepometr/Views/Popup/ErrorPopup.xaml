@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Stepometer.Views.Popup.ErrorPopup"
+    x:Name="this">
+    <ContentPage.Content>
+        <ScrollView>
+            <Frame
+                Style="{StaticResource FrameContainer}"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <StackLayout>
+                    <Label Style="{StaticResource MainLabel}" 
+                           FontSize="Large"
+                           Text="{Binding Source={x:Reference this}, Path=Message}" />
+                    <Button
+                        Clicked="Button_Clicked"
+                        Style="{StaticResource CommonButton}"
+                        Text="Ok" />
+                </StackLayout>
+            </Frame>
+        </ScrollView>
+    </ContentPage.Content>
+</pages:PopupPage>

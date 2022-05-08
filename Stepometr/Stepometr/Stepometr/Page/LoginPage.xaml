@@ -29,7 +29,7 @@
                             Grid.Row="0"
                             Text="{Binding Email}" 
                             Placeholder="Email"   
-                            PlaceholderColor="White" 
+                            PlaceholderColor="{StaticResource FourthAppColor}" 
                             HeightRequest="40"   
                             Keyboard="Email"  
                             TextColor="White"/>
@@ -38,7 +38,7 @@
                             Grid.Row="1"
                             Text="{Binding Password}" 
                             Placeholder="Senha"
-                            PlaceholderColor="White" 
+                            PlaceholderColor="{StaticResource FourthAppColor}" 
                             HeightRequest="40"
                             IsPassword="True"
                             TextColor="White"/>
@@ -60,8 +60,7 @@
                         Style="{StaticResource MainLabel}"
                         FontAttributes="Bold"
                         FontSize="30"
-                        Text="SingIn"
-                        
+                        Text="SignIn"                        
                         HorizontalOptions="Center"
                         VerticalOptions="Center" />
                     <Frame.GestureRecognizers>
@@ -75,6 +74,7 @@
                     FontSize="Large"
                     Style="{StaticResource MainLabel}"
                     Text="Create new account"
+                    TextColor="{StaticResource SecondMainAppColor}"
                     toolkit:TouchEffect.IsAvailable="True"
                     toolkit:TouchEffect.PressedAnimationDuration="100"
                     toolkit:TouchEffect.NormalAnimationDuration="100"

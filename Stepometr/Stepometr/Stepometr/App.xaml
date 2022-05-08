@@ -79,5 +79,12 @@
             <Setter Property="VerticalOptions" Value="End" />
         </Style>
 
+        <!--  Buttons  -->
+
+        <Style x:Key="CommonButton" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource SecondMainAppColor}" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="TextColor" Value="{StaticResource MainTextColor}" />
+        </Style>
     </Application.Resources>
 </Application>
