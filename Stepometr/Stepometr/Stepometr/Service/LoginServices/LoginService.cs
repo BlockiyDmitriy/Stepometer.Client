@@ -25,6 +25,10 @@ namespace Stepometer.Service.LoginServices
             {
                 var accData = await _dbService.SetNewLoginData(loginModel);
 
+                if (accData is not null && !accData.IsExistAccount)
+                {
+                    //Clean local db
+                }
                 if (accData == null)
                 {
                     throw new Exception("Error create account");

@@ -42,6 +42,7 @@ namespace Stepometer.ViewModel
                 bool isAnyPropEmpty = LoginModel.GetType().GetProperties()
                      .Where(p => p.GetValue(LoginModel) is string) // selecting only string props
                      .Any(p => string.IsNullOrWhiteSpace((p.GetValue(LoginModel) as string)));
+
                 if (isAnyPropEmpty)
                 {
                     await PopupNavigation.Instance.PushAsync(new ErrorPopup("All fields must be filled"));

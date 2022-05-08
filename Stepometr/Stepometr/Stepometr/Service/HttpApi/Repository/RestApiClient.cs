@@ -25,7 +25,7 @@ namespace Stepometer.Service.HttpApi.Repository
             _logService = DependencyResolver.Get<ILogService>();
         }
 
-        public async Task<List<TData>> GetDataAsync(string controllerUrl)
+        public async Task<List<TData>> GetDataAsync(string controllerUrl) 
         {
             try
             {
