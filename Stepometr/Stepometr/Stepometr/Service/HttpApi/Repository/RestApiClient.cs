@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Stepometer.Models.Login;
 using Stepometer.Service.LoggerService;
 using Stepometer.Utils;
 
@@ -76,6 +77,7 @@ namespace Stepometer.Service.HttpApi.Repository
         {
             try
             {
+                _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
                 var response = await HttpClient.PutAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
                     new StringContent(SerializeDeserialize<TData>.ConvertToJson(data)));
 
@@ -99,6 +101,7 @@ namespace Stepometer.Service.HttpApi.Repository
         {
             try
             {
+                _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
                 var response = await HttpClient.DeleteAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString());
 
                 await _logService.TrackResponseAsync(response);
@@ -114,6 +117,29 @@ namespace Stepometer.Service.HttpApi.Repository
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
                 return null;
+            }
+        }
+
+        public async Task<bool> Register(string controllerUrl, RegisterModel registerModel)
+        {
+            try
+            {
+                _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
+                var response = await HttpClient.PostAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
+                    new StringContent(SerializeDeserialize<RegisterModel>.ConvertToJson(registerModel), Encoding.UTF8, "application/json"));
+
+                await _logService.TrackResponseAsync(response);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                return false;
             }
         }
     }

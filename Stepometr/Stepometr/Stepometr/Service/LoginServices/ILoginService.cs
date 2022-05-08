@@ -5,6 +5,6 @@ namespace Stepometer.Service.LoginServices
 {
     public interface ILoginService
     {
-        public Task<LoginModel> CreateNewAccount(LoginModel loginModel);
+        public Task<bool> CreateNewAccount(RegisterModel registerModel);
     }
 }

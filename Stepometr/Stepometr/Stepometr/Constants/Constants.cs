@@ -12,6 +12,8 @@
         public static string UpdateDataStepsById = DataStepsControllerName + "/UpdateDataStepsById";
         public static string DeleteDataSteps = DataStepsControllerName + "/DeleteDataSteps";
 
+        public static string AuthorizationControllerName = "/Account";
 
+        public static string RegisterControllerName = AuthorizationControllerName + "/Register";
     }
 }

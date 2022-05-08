@@ -1,4 +1,5 @@
 ﻿using Stepometer.Models;
+using Stepometer.Models.Login;
 using Stepometer.Service.HttpApi.Repository;
 using System;
 using System.Net.Http;
@@ -10,9 +11,12 @@ namespace Stepometer.Service.HttpApi.UoW
         private readonly HttpClient _httpClient = new HttpClient();
 
         private IRestApiClient<StepometerModel> _StepometerRestApiClient;
+        private IRestApiClient<RegisterModel> _LoginRestApiClient;
 
         public IRestApiClient<StepometerModel> StepometerRestApiClient =>
             _StepometerRestApiClient ??= new RestApiClient<StepometerModel>(_httpClient);
+        public IRestApiClient<RegisterModel> LoginRestApiClient =>
+            _LoginRestApiClient ??= new RestApiClient<RegisterModel>(_httpClient);
 
         public UnitOfWork()
         {

@@ -58,7 +58,7 @@
                     <Entry 
                         x:Name="ConfirmPassword" 
                         Grid.Row="2"
-                        Text="{Binding ConfirmPassword}"
+                        Text="{Binding LoginModel.ConfirmPassword}"
                         Placeholder="Confirm password"
                         PlaceholderColor="{StaticResource FourthAppColor}" 
                         IsPassword="True"

@@ -20,8 +20,7 @@ namespace Stepometer.ViewModel
         private readonly ILoginService _loginService;
 
         public ICommand CreateAccountCommand { get; }
-        public string ConfirmPassword { get; set; }
-        public LoginModel LoginModel { get; set; }
+        public RegisterModel LoginModel { get; set; }
 
         public CreateAccountViewModel(ILogService logService, ILoginService loginService)
         {
@@ -54,24 +53,18 @@ namespace Stepometer.ViewModel
                     await PopupNavigation.Instance.PushAsync(new ErrorPopup("Invalid mail or password"));
                 }
 
-                if (LoginModel.Password != ConfirmPassword)
+                if (LoginModel.Password != LoginModel.ConfirmPassword)
                 {
                     await PopupNavigation.Instance.PushAsync(new ErrorPopup("Error confirm password"));
                     return;
                 }
 
 
-                var loginResult = await _loginService.CreateNewAccount(LoginModel);
+                var isCreatedAccount = await _loginService.CreateNewAccount(LoginModel);
 
-                if (loginResult.IsExistAccount)
+                if (!isCreatedAccount)
                 {
-                    await PopupNavigation.Instance.PushAsync(new ErrorPopup("Current mail is already in use"));
-                    return;
-                }
-
-                if (loginResult == null)
-                {
-                    await PopupNavigation.Instance.PushAsync(new ErrorPopup("Error create account"));
+                    await PopupNavigation.Instance.PushAsync(new ErrorPopup("Error creating account. \n\r Perhaps an account has already been created"));
                     return;
                 }
 

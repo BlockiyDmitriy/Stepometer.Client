@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Stepometer.Models.Login;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Stepometer.Service.HttpApi.Repository
@@ -9,5 +10,9 @@ namespace Stepometer.Service.HttpApi.Repository
         Task<TData> PostDataAsync(string controllerUrl, TData data);
         Task<TData> PutDataAsync(string controllerUrl, TData data);
         Task<TData> DeleteDataAsync(string controllerUrl, TData data);
+
+        #region Login
+        Task<bool> Register(string controllerUrl, RegisterModel registerModel);
+        #endregion
     }
 }
