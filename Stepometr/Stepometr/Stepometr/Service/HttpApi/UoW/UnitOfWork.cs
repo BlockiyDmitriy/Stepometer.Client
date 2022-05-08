@@ -14,7 +14,22 @@ namespace Stepometer.Service.HttpApi.UoW
         public IRestApiClient<StepometerModel> StepometerRestApiClient =>
             _StepometerRestApiClient ??= new RestApiClient<StepometerModel>(_httpClient);
 
-
+        public UnitOfWork()
+        {
+            HttpClientHandler insecureHandler = GetInsecureHandler();
+            _httpClient = new HttpClient(insecureHandler);
+        }
+        public HttpClientHandler GetInsecureHandler()
+        {
+            HttpClientHandler handler = new HttpClientHandler();
+            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+            {
+                if (cert.Issuer.Equals("CN=localhost"))
+                    return true;
+                return errors == System.Net.Security.SslPolicyErrors.None;
+            };
+            return handler;
+        }
         #region Dispose
 
         private bool disposed = false;
