@@ -1,6 +1,5 @@
 ﻿using LiteDB;
 using Stepometer.Models;
-using Stepometer.Models.Login;
 using Stepometer.Service.LoggerService;
 using Stepometer.Utils;
 using System;
@@ -14,7 +13,6 @@ namespace Stepometer.Service.LoaclDB
     public class DBService : IDBService
     {
         private readonly LiteDatabase _liteDatabase;
-        private readonly ILiteCollection<LoginModel> _loginCollection;
         private readonly ILiteCollection<StepometerModel> _stepometerModel;
         private readonly ILiteCollection<ActivityDate> _activityDateCollection;
 
@@ -25,7 +23,6 @@ namespace Stepometer.Service.LoaclDB
             _liteDatabase = new LiteDatabase(DBHelper.DBPath);
             _stepometerModel = _liteDatabase.GetCollection<StepometerModel>(DBHelper.StepometerCollection);
             _activityDateCollection = _liteDatabase.GetCollection<ActivityDate>(DBHelper.ActivityDateId);
-            _loginCollection = _liteDatabase.GetCollection<LoginModel>(DBHelper.LoginCollection);
 
             _logService = DependencyResolver.Get<ILogService>();
         }
@@ -115,42 +112,6 @@ namespace Stepometer.Service.LoaclDB
         {
             var activityDate = _activityDateCollection.FindOne(a => a.Id == DBHelper.ActivityDateId);
             return Task.FromResult(activityDate == null ? default(DateTimeOffset) : activityDate.Date);
-        }
-
-        public Task<LoginModel> SetNewLoginData(LoginModel loginModel)
-        {
-            try
-            {
-                var existLoginData = _loginCollection.FindAll().Where(m => m.Email == loginModel.Email).ToList();
-                
-                if (existLoginData.Any())
-                {
-                    existLoginData.FirstOrDefault().IsExistAccount = true;
-                    return Task.FromResult(existLoginData.FirstOrDefault());
-                }
-
-                _loginCollection.Insert(loginModel);
-                return Task.FromResult(loginModel);
-            }
-            catch (Exception e)
-            {
-                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return Task.FromResult(loginModel);
-            }
-        }
-
-        public Task<LoginModel> GetLoginData(LoginModel loginModel)
-        {
-            try
-            {
-                var data = _loginCollection.FindAll().LastOrDefault();
-                return Task.FromResult(data);
-            }
-            catch (Exception e)
-            {
-                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return Task.FromResult(new LoginModel());
-            }
         }
     }
     public class ActivityDate
