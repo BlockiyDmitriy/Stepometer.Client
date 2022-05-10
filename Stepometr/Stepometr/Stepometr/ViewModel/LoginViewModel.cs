@@ -13,30 +13,31 @@ using Stepometer.Service.LoggerService;
 using System.Reflection;
 using Rg.Plugins.Popup.Services;
 using Stepometer.Views.Popup;
+using Stepometer.Service.LoginServices;
+using Stepometer.Models.Login;
 
 namespace Stepometer.ViewModel
 {
     public class LoginViewModel : BaseViewModel
     {
         private readonly ILogService _logService;
-
-        public Action DisplayInvalidLoginPrompt;
+        private readonly ILoginService _loginService;
 
         public TaskLoaderNotifier LoginLoader { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
         public ICommand LoginCommand { get; }
-        public ICommand SubmitCommand { protected set; get; }
         public ICommand CreateNewAccountCommand { get; }
-        public LoginViewModel(ILogService logService)
+        public LoginModel LoginModel { get; set; }
+
+        public LoginViewModel(ILogService logService, ILoginService loginService)
         {
             _logService = logService;
+            _loginService = loginService;
 
             LoginCommand = new Command(() => LoginLoader.Load(OnLoginClicked));
             LoginLoader = new TaskLoaderNotifier();
             LoginLoader.ShowResult = true;
+            LoginModel = new();
 
-            SubmitCommand = new Command(async () => await OnSubmit());
             CreateNewAccountCommand = new Command(async ()=> await CreateNewAccount());
         }
 
@@ -44,21 +45,18 @@ namespace Stepometer.ViewModel
         {
             try
             {
-                await Shell.Current.GoToAsync($"//{nameof(StepometerPage)}");
+                var isLogin = await _loginService.Login(LoginModel);
+
+                if (isLogin)
+                {
+                    await Shell.Current.GoToAsync($"//{nameof(StepometerPage)}");
+                }
             }
             catch(Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                await PopupNavigation.Instance.PushAsync(new ErrorPopup("Error authorization"));
             }
-        }
-
-        public Task OnSubmit()
-        {
-            if (Email != "macoratti@yahoo.com" || Password != "secret")
-            {
-                DisplayInvalidLoginPrompt();
-            }
-            return Task.CompletedTask;
         }
 
         public async Task CreateNewAccount()

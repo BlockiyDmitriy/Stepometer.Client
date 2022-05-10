@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -140,6 +141,65 @@ namespace Stepometer.Service.HttpApi.Repository
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
                 return false;
+            }
+        }
+
+        public async Task<bool> Login(string controllerUrl, LoginModel loginModel)
+        {
+            try
+            {
+                _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
+
+
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(Constants.Constants.BaseUrl);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+
+                var response = await client.PostAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
+                    new HttpContent() "{'grant_type'='password'&'username'='username'&'password'='password'");
+                var response = await client.PostAsJsonAsync("token", "grant_type=password&username=username&password=password");
+
+                var response = await HttpClient.PostAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
+                    new StringContent(SerializeDeserialize<LoginModel>.ConvertToJson(loginModel), Encoding.UTF8, "application/x-www-form-urlencoded"));
+
+                await _logService.TrackResponseAsync(response);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                return false;
+            }
+        }
+
+        public async Task<string> GetToken(string controllerUrl, LoginModel loginModel)
+        {
+            try
+            {
+                _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
+                var response = await HttpClient.GetAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString());
+
+                await _logService.TrackResponseAsync(response);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
+
+                return SerializeDeserialize<string>.ConvertFromJson(await response.Content.ReadAsStringAsync()).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                return string.Empty;
             }
         }
     }

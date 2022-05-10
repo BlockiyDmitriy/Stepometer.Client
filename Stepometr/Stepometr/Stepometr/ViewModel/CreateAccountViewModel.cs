@@ -36,13 +36,7 @@ namespace Stepometer.ViewModel
         {
             try
             {
-                LoginModel.Email.Trim();
-
-                bool isAnyPropEmpty = LoginModel.GetType().GetProperties()
-                     .Where(p => p.GetValue(LoginModel) is string) // selecting only string props
-                     .Any(p => string.IsNullOrWhiteSpace((p.GetValue(LoginModel) as string)));
-
-                if (isAnyPropEmpty)
+                if (IsAnyPropEmpty())
                 {
                     await PopupNavigation.Instance.PushAsync(new ErrorPopup("All fields must be filled"));
                     return;
@@ -51,6 +45,7 @@ namespace Stepometer.ViewModel
                 if (!IsValidEmail(LoginModel.Email) || !IsValidPassword(LoginModel.Password))
                 {
                     await PopupNavigation.Instance.PushAsync(new ErrorPopup("Invalid mail or password"));
+                    return;
                 }
 
                 if (LoginModel.Password != LoginModel.ConfirmPassword)
@@ -77,13 +72,21 @@ namespace Stepometer.ViewModel
             }
         }
 
+        private bool IsAnyPropEmpty()
+        {
+            bool isAnyPropEmpty = LoginModel.GetType().GetProperties()
+                     .Where(p => p.GetValue(LoginModel) is string) // selecting only string props
+                     .Any(p => string.IsNullOrWhiteSpace((p.GetValue(LoginModel) as string)));
+            return isAnyPropEmpty;
+        }
+
         private bool IsValidEmail(string email)
         {
             var trimmedEmail = email.Trim();
 
             if (trimmedEmail.EndsWith("."))
             {
-                return false; // suggested by @TK-421
+                return false;
             }
             try
             {

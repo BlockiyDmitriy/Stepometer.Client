@@ -27,7 +27,7 @@
                         <Entry 
                             x:Name="Email" 
                             Grid.Row="0"
-                            Text="{Binding Email}" 
+                            Text="{Binding LoginModel.Email}" 
                             Placeholder="Email"   
                             PlaceholderColor="{StaticResource FourthAppColor}" 
                             HeightRequest="40"   
@@ -36,7 +36,7 @@
                         <Entry 
                             x:Name="Password" 
                             Grid.Row="1"
-                            Text="{Binding Password}" 
+                            Text="{Binding LoginModel.Password}" 
                             Placeholder="Senha"
                             PlaceholderColor="{StaticResource FourthAppColor}" 
                             HeightRequest="40"

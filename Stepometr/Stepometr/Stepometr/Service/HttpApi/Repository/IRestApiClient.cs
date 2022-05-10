@@ -13,6 +13,8 @@ namespace Stepometer.Service.HttpApi.Repository
 
         #region Login
         Task<bool> Register(string controllerUrl, RegisterModel registerModel);
+        Task<bool> Login(string controllerUrl, LoginModel registerModel);
+        Task<string> GetToken(string controllerUrl, LoginModel registerModel);
         #endregion
     }
 }
