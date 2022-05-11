@@ -181,12 +181,28 @@ namespace Stepometer.Service.HttpApi.Repository
             }
         }
 
+        //TODO: Get token doesn't work
         public async Task<string> GetToken(string controllerUrl, LoginModel loginModel)
         {
             try
             {
                 _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
-                var response = await HttpClient.GetAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString());
+
+                var keyValues = new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("username", loginModel.Email),
+                    new KeyValuePair<string, string>("password", loginModel.Password),
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                };
+
+                var request = new HttpRequestMessage(HttpMethod.Post, _baseUrlStringBuilder.Append(controllerUrl).ToString());
+
+                request.Content = new FormUrlEncodedContent(keyValues);
+
+                HttpClientHandler handler = new HttpClientHandler();
+                handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+                HttpClient client = new HttpClient(handler);
+                var response = await client.SendAsync(request);
 
                 await _logService.TrackResponseAsync(response);
 
