@@ -1,5 +1,6 @@
 ﻿using Stepometer.Models;
 using Stepometer.Service.HttpApi.ConvertService.Contracts;
+using Stepometer.Service.HttpApi.Repository;
 using Stepometer.Service.HttpApi.UoW;
 using Stepometer.Service.LoaclDB;
 using Stepometer.Service.LoggerService;
@@ -15,6 +16,8 @@ namespace Stepometer.Service.HttpApi.ConvertService
 {
     public class StepometerService : BaseService, IStepometerService
     {
+        private readonly IRestApiClient<StepometerModel> _stepometerApi;
+
         private readonly IDBService _dbService;
         public StepometerService(IUnitOfWork uOW) : base(uOW)
         {
@@ -23,6 +26,8 @@ namespace Stepometer.Service.HttpApi.ConvertService
 
         public StepometerService()
         {
+            _stepometerApi = UOW?.StepometerRestApiClient;
+
             _dbService = DependencyResolver.Get<IDBService>();
         }
 
@@ -38,7 +43,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
                 {
                     _logService.Log("First launch");
                     _logService.Log("Load data from server");
-                    result = await UOW?.StepometerRestApiClient.GetDataAsync(Constants.Constants.GetDataSteps);
+                    result = await _stepometerApi?.GetDataAsync(Constants.Constants.GetDataSteps);
 
                     _logService.Log("Update local db data");
                     await _dbService.SetStepometerDataAsync(result.LastOrDefault());
@@ -77,7 +82,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
         {
             try
             {
-                var serverModel = await UOW?.StepometerRestApiClient.PostDataAsync(Constants.Constants.AddDataSteps, data);
+                var serverModel = await _stepometerApi?.PostDataAsync(Constants.Constants.AddDataSteps, data);
                 await _dbService.SetStepometerDataAsync(serverModel);
 
                 _logService.Log("Update last activity date");
@@ -108,7 +113,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
                     await _dbService.UpdateLastActivityDate(DateTimeOffset.Now);
 
                     _logService.Log("Push data to the server");
-                    var resApi = await UOW?.StepometerRestApiClient.PostDataAsync(Constants.Constants.AddDataSteps, data);
+                    var resApi = await _stepometerApi?.PostDataAsync(Constants.Constants.AddDataSteps, data);
                     var resDv = await _dbService.SetStepometerDataAsync(new StepometerModel
                     {
                         Account = stepometerData.Account,
@@ -143,7 +148,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
         {
             try
             {
-                return UOW?.StepometerRestApiClient.DeleteDataAsync(Constants.Constants.DeleteDataSteps, data);
+                return _stepometerApi?.DeleteDataAsync(Constants.Constants.DeleteDataSteps, data);
             }
             catch (Exception e)
             {
