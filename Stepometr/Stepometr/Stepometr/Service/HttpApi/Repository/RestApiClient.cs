@@ -150,15 +150,21 @@ namespace Stepometer.Service.HttpApi.Repository
             {
                 _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
 
-                var authData = string.Format("{0}:{1}", loginModel.Email, loginModel.Password);
-                var authHeaderValue = Convert.ToBase64String(Encoding.UTF8.GetBytes(authData));
+                var keyValues = new List<KeyValuePair<string, string>>
+                {
+                    new KeyValuePair<string, string>("username", loginModel.Email),
+                    new KeyValuePair<string, string>("password", loginModel.Password),
+                    new KeyValuePair<string, string>("grant_type", "password"),
+                };
 
-                var client = new HttpClient();
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authHeaderValue);
+                var request = new HttpRequestMessage(HttpMethod.Post, _baseUrlStringBuilder.Append(controllerUrl).ToString());
 
+                request.Content = new FormUrlEncodedContent(keyValues);
 
-                //var response = await HttpClient.PostAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
-                //    new StringContent(SerializeDeserialize<LoginModel>.ConvertToJson(loginModel), Encoding.UTF8, "application/x-www-form-urlencoded"));
+                HttpClientHandler handler = new HttpClientHandler();
+                handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+                HttpClient client = new HttpClient(handler);
+                var response = await client.SendAsync(request);
 
                 await _logService.TrackResponseAsync(response);
 

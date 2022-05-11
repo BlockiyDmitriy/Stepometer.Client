@@ -51,6 +51,10 @@ namespace Stepometer.ViewModel
                 {
                     await Shell.Current.GoToAsync($"//{nameof(StepometerPage)}");
                 }
+                else
+                {
+                    await PopupNavigation.Instance.PushAsync(new ErrorPopup("Wrong login or password"));
+                }
             }
             catch(Exception e)
             {
