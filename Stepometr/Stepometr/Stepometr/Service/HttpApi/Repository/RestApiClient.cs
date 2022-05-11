@@ -150,20 +150,15 @@ namespace Stepometer.Service.HttpApi.Repository
             {
                 _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
 
+                var authData = string.Format("{0}:{1}", loginModel.Email, loginModel.Password);
+                var authHeaderValue = Convert.ToBase64String(Encoding.UTF8.GetBytes(authData));
 
                 var client = new HttpClient();
-                client.BaseAddress = new Uri(Constants.Constants.BaseUrl);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authHeaderValue);
 
-                var response = await client.PostAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
-                    new HttpContent() "{'grant_type'='password'&'username'='username'&'password'='password'");
-                var response = await client.PostAsJsonAsync("token", "grant_type=password&username=username&password=password");
 
-                var response = await HttpClient.PostAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
-                    new StringContent(SerializeDeserialize<LoginModel>.ConvertToJson(loginModel), Encoding.UTF8, "application/x-www-form-urlencoded"));
+                //var response = await HttpClient.PostAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString(),
+                //    new StringContent(SerializeDeserialize<LoginModel>.ConvertToJson(loginModel), Encoding.UTF8, "application/x-www-form-urlencoded"));
 
                 await _logService.TrackResponseAsync(response);
 
