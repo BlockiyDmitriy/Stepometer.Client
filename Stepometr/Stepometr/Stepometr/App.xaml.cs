@@ -1,5 +1,6 @@
 ﻿using Stepometer.Service;
 using Stepometer.Service.HttpApi.ConvertService;
+using Stepometer.Service.HttpApi.UoW;
 using Stepometer.Service.LoaclDB;
 using Stepometer.Service.LoggerService;
 using Stepometer.Service.LoginServices;
@@ -31,6 +32,7 @@ namespace Stepometer
             DependencyResolver.Register<DBService>();
             DependencyResolver.Register<LogService>();
             DependencyResolver.Register<LoginService>();
+            DependencyResolver.Register<UnitOfWork>();
         }
 
         protected override void OnStart()

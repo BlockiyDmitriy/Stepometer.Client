@@ -13,80 +13,92 @@
 
     <ContentPage.Content>
         <customviews:TaskLoaderView TaskLoaderNotifier="{Binding LoginLoader}">
+
             <Grid
-                RowDefinitions="10,*,*,*"
-                VerticalOptions="FillAndExpand"
-                Padding="30">
-                <Frame 
+                RowDefinitions="*,2*">
+                <Image 
+                    Grid.RowSpan="2"
+                    Source="{Binding Source={x:Static utils:EmbeddedImages.Wallpaper},
+                                     Converter={StaticResource EmbeddedToImageSourceConverter}}"
+                    Opacity="0.4"
+                    Aspect="AspectFill"/>
+                <Image 
+                    Grid.Row="0"
+                    Source="{Binding Source={x:Static utils:EmbeddedImages.StepometerText},
+                                     Converter={StaticResource EmbeddedToImageSourceConverter}}"
+                    Aspect="AspectFit"/>
+                <Grid                
                     Grid.Row="1"
-                    Style="{StaticResource FrameContainer}"
-                    VerticalOptions="End"
-                    HasShadow="False">
-                    <Grid
-                        RowDefinitions="50,50">
+                    RowDefinitions="*,*,*,*,20">
+                    <Frame
+                        Grid.Row="0"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="EndAndExpand"
+                        BackgroundColor="Transparent"
+                        CornerRadius="30"
+                        Padding="40,0"
+                        Margin="40,0"
+                        BorderColor="{StaticResource SecondMainAppColor}">
                         <Entry 
-                            x:Name="Email" 
-                            Grid.Row="0"
-                            Text="{Binding LoginModel.Email}" 
-                            Placeholder="Email"   
-                            PlaceholderColor="{StaticResource FourthAppColor}" 
-                            HeightRequest="40"   
-                            Keyboard="Email"  
-                            TextColor="White"/>
+                            BackgroundColor="Transparent"
+                            Placeholder="Email"
+                            PlaceholderColor="AntiqueWhite"
+                            Text="{Binding LoginModel.Email}"
+                            TextColor="AntiqueWhite"
+                            Keyboard="Email"/>
+                    </Frame>
+                    <Frame
+                        Grid.Row="1"
+                        HorizontalOptions="FillAndExpand"
+                        VerticalOptions="StartAndExpand"
+                        BackgroundColor="Transparent"
+                        CornerRadius="30"
+                        Padding="40,0"
+                        Margin="40,0"
+                        BorderColor="{StaticResource SecondMainAppColor}">
                         <Entry 
-                            x:Name="Password" 
-                            Grid.Row="1"
-                            Text="{Binding LoginModel.Password}" 
-                            Placeholder="Senha"
-                            PlaceholderColor="{StaticResource FourthAppColor}" 
-                            HeightRequest="40"
-                            IsPassword="True"
-                            TextColor="White"/>
-                    </Grid>
-                </Frame>
-                <Frame                     
-                    Grid.Row="2"
-                    Style="{StaticResource FrameContainerWithSecondColor}"
-                    VerticalOptions="Center"
-                    HorizontalOptions="FillAndExpand"
-                    toolkit:TouchEffect.IsAvailable="True"
-                    toolkit:TouchEffect.PressedAnimationDuration="100"
-                    toolkit:TouchEffect.NormalAnimationDuration="100"
-                    toolkit:TouchEffect.PressedScale="0.9"
-                    toolkit:TouchEffect.NormalScale="1"
-                    toolkit:TouchEffect.PressedOpacity="0.75"
-                    toolkit:TouchEffect.NormalOpacity="1">
+                            BackgroundColor="Transparent"
+                            Placeholder="Password"
+                            PlaceholderColor="AntiqueWhite"
+                            Text="{Binding LoginModel.Password}"
+                            TextColor="AntiqueWhite"
+                            IsPassword="True"/>
+                    </Frame>
+                    <Button
+                        Grid.Row="2"
+                        Text="Sign In"
+                        CornerRadius="30"
+                        TextColor="White"
+                        BackgroundColor="{StaticResource SecondMainAppColor}"
+                        Command="{Binding LoginCommand}"
+                        Margin="40,0"
+                        HeightRequest="40"
+                        VerticalOptions="EndAndExpand" 
+                        HorizontalOptions="FillAndExpand" />
+                    <Button
+                        Grid.Row="3"
+                        Text="Sign Up"
+                        CornerRadius="30"
+                        TextColor="{StaticResource SecondMainAppColor}"
+                        BackgroundColor="Transparent"
+                        BorderColor="{StaticResource SecondMainAppColor}"
+                        BorderWidth="3"
+                        Command="{Binding CreateNewAccountCommand}"
+                        Margin="40,0"
+                        HeightRequest="40"
+                        VerticalOptions="StartAndExpand" 
+                        HorizontalOptions="FillAndExpand" />
                     <Label
-                        Style="{StaticResource MainLabel}"
-                        FontAttributes="Bold"
-                        FontSize="30"
-                        Text="SignIn"                        
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center" />
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding LoginCommand}" />
-                    </Frame.GestureRecognizers>
-                </Frame>
-                <Label 
-                    Grid.Row="3"
-                    VerticalOptions="EndAndExpand"
-                    HorizontalOptions="CenterAndExpand"
-                    FontSize="Large"
-                    Style="{StaticResource MainLabel}"
-                    Text="Create new account"
-                    TextColor="{StaticResource SecondMainAppColor}"
-                    toolkit:TouchEffect.IsAvailable="True"
-                    toolkit:TouchEffect.PressedAnimationDuration="100"
-                    toolkit:TouchEffect.NormalAnimationDuration="100"
-                    toolkit:TouchEffect.PressedScale="0.9"
-                    toolkit:TouchEffect.NormalScale="1"
-                    toolkit:TouchEffect.PressedOpacity="0.75"
-                    toolkit:TouchEffect.NormalOpacity="1">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding CreateNewAccountCommand}"/>
-                    </Label.GestureRecognizers>
-                </Label>
-            </Grid>
+                        Grid.Row="4"
+                        Text="Development"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="Start">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DevelopLoginCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+            </Grid>            
         </customviews:TaskLoaderView>
     </ContentPage.Content>
 </ContentPage>

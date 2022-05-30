@@ -26,6 +26,7 @@ namespace Stepometer.ViewModel
         public TaskLoaderNotifier LoginLoader { get; set; }
         public ICommand LoginCommand { get; }
         public ICommand CreateNewAccountCommand { get; }
+        public ICommand DevelopLoginCommand { get; }
         public LoginModel LoginModel { get; set; }
 
         public LoginViewModel(ILogService logService, ILoginService loginService)
@@ -39,6 +40,12 @@ namespace Stepometer.ViewModel
             LoginModel = new();
 
             CreateNewAccountCommand = new Command(async ()=> await CreateNewAccount());
+            DevelopLoginCommand = new Command(async ()=> await DevelopLogin());
+        }
+
+        private async Task DevelopLogin()
+        {
+            await Shell.Current.GoToAsync($"//{nameof(StepometerPage)}");
         }
 
         private async Task OnLoginClicked()

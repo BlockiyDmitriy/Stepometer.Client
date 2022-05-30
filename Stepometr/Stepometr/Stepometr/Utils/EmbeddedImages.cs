@@ -14,6 +14,8 @@
         public const string MenuWhite = BasePath + "menu_white.png";
         public const string Settings = BasePath + "setting.png";
         public const string Stepometer = BasePath + "manWalkingWhite.png";
+        public const string StepometerText = BasePath + "stepometer_text.png";
         public const string Trophy = BasePath + "trophy.png";
+        public const string Wallpaper = BasePath + "wallpaper.jpg";
     }
 }

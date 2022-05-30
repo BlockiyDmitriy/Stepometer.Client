@@ -30,7 +30,9 @@
     <None Remove="Images\menu_black.png" />
     <None Remove="Images\menu_white.png" />
     <None Remove="Images\setting.png" />
+    <None Remove="Images\stepometer_text.png" />
     <None Remove="Images\trophy.png" />
+    <None Remove="Images\wallpaper.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,7 +71,9 @@
     <EmbeddedResource Include="Images\menu_black.png" />
     <EmbeddedResource Include="Images\menu_white.png" />
     <EmbeddedResource Include="Images\setting.png" />
+    <EmbeddedResource Include="Images\stepometer_text.png" />
     <EmbeddedResource Include="Images\trophy.png" />
+    <EmbeddedResource Include="Images\wallpaper.jpg" />
   </ItemGroup>
 
   <ItemGroup>
