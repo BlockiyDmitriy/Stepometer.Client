@@ -1,5 +1,5 @@
 ﻿using Stepometer.Models;
-using Stepometer.Service.Interfaces;
+using Stepometer.Service.HttpApi.ConvertService.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

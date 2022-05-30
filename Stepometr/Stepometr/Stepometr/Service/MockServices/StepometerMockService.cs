@@ -1,7 +1,8 @@
 ﻿using Stepometer.Models;
+using Stepometer.Service.HttpApi.ConvertService.Contracts;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Stepometer.Service.Interfaces;
 
 namespace Stepometer.Service.MockServices
 {
@@ -12,6 +13,16 @@ namespace Stepometer.Service.MockServices
         public StepometerMockService()
         {
             _stepometerModel = new StepometerModel();
+        }
+
+        public Task<StepometerModel> DeleteData(StepometerModel data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<StepometerModel>> GetData()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<StepometerModel> LoadCurrentStepsData()
@@ -28,6 +39,16 @@ namespace Stepometer.Service.MockServices
             };
             _stepometerModel = stepometerModel;
             return _stepometerModel;
+        }
+
+        public Task<StepometerModel> PostData(StepometerModel data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<StepometerModel> PutData(StepometerModel data)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<StepometerModel> UpdateCurrentStepsData(long steps)

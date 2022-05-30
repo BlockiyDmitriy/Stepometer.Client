@@ -9,5 +9,6 @@ namespace Stepometer.Service.HttpApi.UoW
     {
         IRestApiClient<StepometerModel> StepometerRestApiClient { get; }
         IRestApiClient<RegisterModel> LoginRestApiClient { get; }
+        IRestApiClient<HistoryUserParamWebModel> HistoryRestApiClient { get; }
     }
 }

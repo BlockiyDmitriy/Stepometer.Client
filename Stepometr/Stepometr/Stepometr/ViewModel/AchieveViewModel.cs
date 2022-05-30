@@ -1,6 +1,6 @@
 ﻿using Sharpnado.Presentation.Forms;
 using Stepometer.Models;
-using Stepometer.Service.Interfaces;
+using Stepometer.Service.HttpApi.ConvertService.Contracts;
 using Stepometer.Settings;
 using System;
 using System.Diagnostics;
@@ -50,7 +50,8 @@ namespace Stepometer.ViewModel
                     Achieve = new ObservableRangeCollection<AchieveModel>(achieve.OrderByDescending(u => Convert.ToInt32(u.AmountCompleted)));
                 });
 
-                var stepometerModel = await _stepometerService.LoadCurrentStepsData();
+                var stepometerModelT = await _stepometerService.GetData();
+                var stepometerModel = stepometerModelT.FirstOrDefault();
 
                 foreach (var item in achieve)
                 {

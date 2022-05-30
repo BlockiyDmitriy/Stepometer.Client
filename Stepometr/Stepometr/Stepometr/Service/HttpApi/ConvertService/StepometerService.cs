@@ -114,7 +114,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
 
                     _logService.Log("Push data to the server");
                     var resApi = await _stepometerApi?.PostDataAsync(Constants.Constants.AddDataSteps, data);
-                    var resDv = await _dbService.SetStepometerDataAsync(new StepometerModel
+                    var resDb = await _dbService.SetStepometerDataAsync(new StepometerModel
                     {
                         Account = stepometerData.Account,
                         Calories = stepometerData.Calories,
@@ -131,7 +131,7 @@ namespace Stepometer.Service.HttpApi.ConvertService
                     }
                     else
                     {
-                        stepometerData = resDv;
+                        stepometerData = resDb;
                     }
                 }
 

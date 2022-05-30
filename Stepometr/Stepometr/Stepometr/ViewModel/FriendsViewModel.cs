@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using Sharpnado.Presentation.Forms;
 using Stepometer.Models;
-using Stepometer.Service.Interfaces;
+using Stepometer.Service.HttpApi.ConvertService.Contracts;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;

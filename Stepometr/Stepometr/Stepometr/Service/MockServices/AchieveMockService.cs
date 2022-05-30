@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Stepometer.Models;
-using Stepometer.Service.Interfaces;
+using Stepometer.Service.HttpApi.ConvertService.Contracts;
 
 namespace Stepometer.Service.MockServices
 {

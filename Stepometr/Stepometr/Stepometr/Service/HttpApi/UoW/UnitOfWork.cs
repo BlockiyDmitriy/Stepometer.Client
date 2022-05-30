@@ -10,13 +10,16 @@ namespace Stepometer.Service.HttpApi.UoW
     {
         private readonly HttpClient _httpClient = new HttpClient();
 
-        private IRestApiClient<StepometerModel> _StepometerRestApiClient;
-        private IRestApiClient<RegisterModel> _LoginRestApiClient;
+        private IRestApiClient<StepometerModel> _stepometerRestApiClient;
+        private IRestApiClient<HistoryUserParamWebModel> _historyRestApiClient;
+        private IRestApiClient<RegisterModel> _loginRestApiClient;
 
         public IRestApiClient<StepometerModel> StepometerRestApiClient =>
-            _StepometerRestApiClient ??= new RestApiClient<StepometerModel>(_httpClient);
+            _stepometerRestApiClient ??= new RestApiClient<StepometerModel>(_httpClient);
+        public IRestApiClient<HistoryUserParamWebModel> HistoryRestApiClient =>
+            _historyRestApiClient ??= new RestApiClient<HistoryUserParamWebModel>(_httpClient);
         public IRestApiClient<RegisterModel> LoginRestApiClient =>
-            _LoginRestApiClient ??= new RestApiClient<RegisterModel>(_httpClient);
+            _loginRestApiClient ??= new RestApiClient<RegisterModel>(_httpClient);
 
         public UnitOfWork()
         {
