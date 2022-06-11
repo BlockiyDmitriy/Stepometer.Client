@@ -51,9 +51,9 @@ namespace Stepometer.Controls
 
         #endregion
 
-        #region Items Property
+        #region Item Property
 
-        public static readonly BindableProperty ItemsProperty = BindableProperty.Create(
+        public static readonly BindableProperty ItemProperty = BindableProperty.Create(
             nameof(Item),
             typeof(AvgPeriodDataModel),
             typeof(HistoryContentView),
@@ -79,8 +79,8 @@ namespace Stepometer.Controls
 
         public AvgPeriodDataModel Item
         {
-            get => (AvgPeriodDataModel) GetValue(ItemsProperty);
-            set => SetValue(ItemsProperty, value);
+            get => (AvgPeriodDataModel) GetValue(ItemProperty);
+            set => SetValue(ItemProperty, value);
         }
 
         #endregion
@@ -118,10 +118,10 @@ namespace Stepometer.Controls
                 return;
             }
 
-            AverageSteps = Item.AvgSteps;
-            AverageDistance = Item.AvgDistance;
-            AverageCalories = Item.AvgCalories;
-            AverageSpeed = Item.AvgSpeed;
+            AverageSteps = Math.Round(Item.AvgSteps, 2);
+            AverageDistance = Math.Round(Item.AvgDistance, 2);
+            AverageCalories = Math.Round(Item.AvgCalories, 2);
+            AverageSpeed = Math.Round(Item.AvgSpeed, 2);
         }
     }
 }

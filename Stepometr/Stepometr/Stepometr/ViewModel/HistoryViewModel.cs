@@ -25,7 +25,6 @@ namespace Stepometer.ViewModel
         private IList<StepometerModel> _allDataStat;
         private IHistoryService _historyService;
 
-        public ObservableRangeCollection<StepometerModel> Data { get; set; }
         public AvgPeriodDataModel PeriodAvgData { get; set; }
         public ObservableRangeCollection<ChartEntry> Entries { get; set; }
         public ObservableRangeCollection<ExpanderHistoryModel> ExpanderHistory { get; set; }
@@ -40,7 +39,6 @@ namespace Stepometer.ViewModel
             _historyService = historyService;
 
             PeriodAvgData = new AvgPeriodDataModel();
-            Data = new ObservableRangeCollection<StepometerModel>();
             Entries = new ObservableRangeCollection<ChartEntry>();
             ExpanderHistory = new ObservableRangeCollection<ExpanderHistoryModel>();
             SegmentChangedCommand = new AsyncCommand(async () => await OnSegmentChanged(), continueOnCapturedContext: false);
@@ -83,7 +81,6 @@ namespace Stepometer.ViewModel
                 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    Data?.Clear();
                     Entries?.Clear();
                     ExpanderHistory?.Clear();
                 });
@@ -97,7 +94,6 @@ namespace Stepometer.ViewModel
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    Data.AddRange(data);
                     PeriodAvgData = avgPeriod;
                     Entries.AddRange(entries);
                     ExpanderHistory.AddRange(expanderData);
