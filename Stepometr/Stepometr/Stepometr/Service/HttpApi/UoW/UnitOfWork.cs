@@ -13,6 +13,7 @@ namespace Stepometer.Service.HttpApi.UoW
         private IRestApiClient<StepometerModel> _stepometerRestApiClient;
         private IRestApiClient<HistoryUserParamWebModel> _historyRestApiClient;
         private IRestApiClient<RegisterModel> _loginRestApiClient;
+        private IRestApiClient<AvgHistoryWebModel> _avgHistoryRestApiClient;
 
         public IRestApiClient<StepometerModel> StepometerRestApiClient =>
             _stepometerRestApiClient ??= new RestApiClient<StepometerModel>(_httpClient);
@@ -20,6 +21,8 @@ namespace Stepometer.Service.HttpApi.UoW
             _historyRestApiClient ??= new RestApiClient<HistoryUserParamWebModel>(_httpClient);
         public IRestApiClient<RegisterModel> LoginRestApiClient =>
             _loginRestApiClient ??= new RestApiClient<RegisterModel>(_httpClient);
+        public IRestApiClient<AvgHistoryWebModel> AvgHistoryRestApiClient =>
+            _avgHistoryRestApiClient ??= new RestApiClient<AvgHistoryWebModel>(_httpClient);
 
         public UnitOfWork()
         {

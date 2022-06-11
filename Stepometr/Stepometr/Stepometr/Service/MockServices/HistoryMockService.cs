@@ -25,5 +25,11 @@ namespace Stepometer.Service.MockServices
 
             return resultData;
         }
+
+        public Task<IList<HistoryUserParamWebModel>> GetHistoryData()
+        {
+            IList<HistoryUserParamWebModel> result = new List<HistoryUserParamWebModel>();
+            return Task.FromResult(result);
+        }
     }
 }

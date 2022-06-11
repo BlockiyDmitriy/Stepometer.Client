@@ -62,8 +62,7 @@ namespace Stepometer.ViewModel
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
-                throw;
+
             }
         }
 
@@ -80,8 +79,7 @@ namespace Stepometer.ViewModel
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
-                throw;
+
             }
         }
 

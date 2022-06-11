@@ -14,26 +14,59 @@
             <Frame 
                 Style="{StaticResource FrameContainer}"
                 Padding="5">
-                <Grid>
+                <Grid 
+                    RowDefinitions="auto, *,*,*,*"
+                    ColumnDefinitions="0.4*, *">
                     <Label 
-                        Style="{StaticResource MainLabel}"
                         Grid.Row="0"
+                        Grid.Column="0"
+                        Style="{StaticResource MainLabel}"
+                        Text="UID: "/>
+                    <Label 
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Style="{StaticResource MainLabel}"
+                        Text="Name: "/>
+                    <Label 
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Style="{StaticResource MainLabel}"
+                        Text="Surname: "/>
+                    <Label 
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Style="{StaticResource MainLabel}"
+                        Text="Lastname: "/>
+                    <Label 
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Style="{StaticResource MainLabel}"
+                        Text="Phone number: "/>
+                    
+                    <Label 
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Style="{StaticResource MainLabel}"
                         Text="{Binding Id}"/>
                     <Label 
-                        Style="{StaticResource MainLabel}"
                         Grid.Row="1"
+                        Grid.Column="1"
+                        Style="{StaticResource MainLabel}"
                         Text="{Binding Name}"/>
                     <Label 
-                        Style="{StaticResource MainLabel}"
                         Grid.Row="2"
+                        Grid.Column="1"
+                        Style="{StaticResource MainLabel}"
                         Text="{Binding SurName}"/>
                     <Label 
-                        Style="{StaticResource MainLabel}"
                         Grid.Row="3"
+                        Grid.Column="1"
+                        Style="{StaticResource MainLabel}"
                         Text="{Binding LastName}"/>
                     <Label 
-                        Style="{StaticResource MainLabel}"
                         Grid.Row="4"
+                        Grid.Column="1"
+                        Style="{StaticResource MainLabel}"
                         Text="{Binding PhoneNumber}"/>
                 </Grid>
             </Frame>

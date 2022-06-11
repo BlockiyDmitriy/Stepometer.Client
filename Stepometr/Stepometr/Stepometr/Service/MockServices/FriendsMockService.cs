@@ -21,43 +21,43 @@ namespace Stepometer.Service.MockServices
             var friends = new List<FriendsModel>();
             friends.Add(new FriendsModel()
             {
-                Id = "0",
-                Name = "name1",
-                LastName = "lastName1",
-                SurName = "surName1",
-                PhoneNumber = "1111111"
+                Id = Guid.NewGuid().ToString(),
+                Name = "Libby",
+                LastName = "Walsh",
+                SurName = "",
+                PhoneNumber = "(696) 250-8946"
             });
             friends.Add(new FriendsModel()
             {
-                Id = "1",
-                Name = "name2",
-                LastName = "lastName2",
-                SurName = "surName2",
-                PhoneNumber = "2222222"
+                Id = Guid.NewGuid().ToString(),
+                Name = "Rishi ",
+                LastName = "Krueger",
+                SurName = "",
+                PhoneNumber = "(767) 652-1870"
             });
             friends.Add(new FriendsModel()
             {
-                Id = "2",
-                Name = "name3",
-                LastName = "lastName3",
-                SurName = "surName3",
-                PhoneNumber = "3333333"
+                Id = Guid.NewGuid().ToString(),
+                Name = "Emery",
+                LastName = "Hughes",
+                SurName = "",
+                PhoneNumber = "(543) 678-8902"
             });
             friends.Add(new FriendsModel()
             {
-                Id = "3",
-                Name = "name4",
-                LastName = "lastName4",
-                SurName = "surName4",
-                PhoneNumber = "4444444"
+                Id = Guid.NewGuid().ToString(),
+                Name = "Keegan",
+                LastName = "Levine",
+                SurName = "Keelev",
+                PhoneNumber = "(845) 533-3899"
             });
             friends.Add(new FriendsModel()
             {
-                Id = "4",
-                Name = "name5",
-                LastName = "lastName5",
-                SurName = "surName5",
-                PhoneNumber = "5555555"
+                Id = Guid.NewGuid().ToString(),
+                Name = "Erik",
+                LastName = "Griffin",
+                SurName = "Griffindeo",
+                PhoneNumber = "(617) 868-5131"
             });
             _friends.AddRange(friends);
 

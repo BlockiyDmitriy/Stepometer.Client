@@ -8,10 +8,12 @@ using Stepometer.Service.HttpApi.ConvertService.Contracts;
 using Stepometer.Service.LoggerService;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Stepometer.ViewModel
@@ -39,8 +41,7 @@ namespace Stepometer.ViewModel
             Data = new ObservableRangeCollection<StepometerModel>();
             Entries = new ObservableRangeCollection<ChartEntry>();
             ExpanderHistory = new ObservableRangeCollection<ExpanderHistoryModel>();
-            SegmentChangedCommand =
-                new AsyncCommand(async () => await OnSegmentChanged(), continueOnCapturedContext: false);
+            SegmentChangedCommand = new AsyncCommand(async () => await OnSegmentChanged(), continueOnCapturedContext: false);
             OpenAchievePageCommand = new AsyncCommand(async () => await OpenAchievePage(), continueOnCapturedContext: false);
             SegmentLoader = new TaskLoaderNotifier();
 
@@ -53,9 +54,7 @@ namespace Stepometer.ViewModel
             return Task.CompletedTask;
         }
 
-
         public async Task OnSegmentChanged() => await PrintGraphExpander();
-
 
         private static (EnumTypePeriod period, byte ValuePoint, byte ValueCountRootExpander)
             ConvertSegmentToNecessaryData(byte segment) =>
@@ -79,18 +78,24 @@ namespace Stepometer.ViewModel
                 var (period, valuePoint, valueCountRootExpander) = ConvertSegmentToNecessaryData(SelectedSegment);
 
                 var tempPeriod = period == EnumTypePeriod.Week ? "Week" : "Month";
-
-                Data?.Clear();
-                Entries?.Clear();
-                ExpanderHistory?.Clear();
+                
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    Data?.Clear();
+                    Entries?.Clear();
+                    ExpanderHistory?.Clear();
+                });
 
                 var data = await PrepareGraphStat(valuePoint);
                 var entries = await CreateGraphData(data);
                 var expanderData = await PrepareExpanderData(_allDataStat, valueCountRootExpander, tempPeriod);
 
-                Data.AddRange(data);
-                Entries.AddRange(entries);
-                ExpanderHistory.AddRange(expanderData);
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    Data.AddRange(data);
+                    Entries.AddRange(entries);
+                    ExpanderHistory.AddRange(expanderData);
+                });
             }
             catch (Exception e)
             {
@@ -117,6 +122,7 @@ namespace Stepometer.ViewModel
                 var historyData = await _historyService.GetHistoryData(amountDayInYear);
 
                 _allDataStat = historyData;
+                
                 await PrintGraphExpander();
 
                 IsBusy = false;
@@ -134,46 +140,56 @@ namespace Stepometer.ViewModel
         /// <param name="valueCountRootExpander">Amount root expander</param>
         /// <param name="period">Selected period</param>
         /// <returns>Return data for expander</returns>
-        private async Task<IList<ExpanderHistoryModel>> PrepareExpanderData(
-            IList<StepometerModel> data,
-            byte valueCountRootExpander,
-            string period)
+        private Task<IList<ExpanderHistoryModel>> PrepareExpanderData(IList<StepometerModel> data,
+            byte valueCountRootExpander, string period)
         {
             try
             {
                 IList<ExpanderHistoryModel> expanderData = new List<ExpanderHistoryModel>();
-                IList<StepometerModel> expanderContentMonthData = new List<StepometerModel>();
-                IList<IList<StepometerModel>> expanderContentSplitMonthData = new List<IList<StepometerModel>>();
 
-                for (int i = 0;
-                    i < valueCountRootExpander;
-                    i++)
-                {
-                    var firstTimeInList = data[i];
-                    var daysInPeriod = period == "Week"
-                        ? 7
-                        : DateTime.DaysInMonth(firstTimeInList.Date.Year, firstTimeInList.Date.Month);
-                    for (int j = 1; j < daysInPeriod + 1; j++)
+                //for (int i = 0; i < valueCountRootExpander; i++)
+                //{
+                //    var firstTimeInList = data[i];
+                //    var daysInPeriod = period == "Week" ? 7 : DateTime.DaysInMonth(firstTimeInList.Date.Year, firstTimeInList.Date.Month);
+
+                //    for (int j = 1; j < daysInPeriod + 1; j++)
+                //    {
+                //        expanderContentMonthData.Add(data[j - 1]);
+                //    }
+
+                //    expanderContentSplitMonthData.Add(expanderContentMonthData);
+
+                //    expanderData.Add(new ExpanderHistoryModel
+                //    {
+                //        Title = (i + 1) + " " + period,
+                //        ExpanderContent = new List<StepometerModel>(expanderContentSplitMonthData[i])
+                //    });
+                //    expanderContentMonthData.Clear();
+                //}
+
+                var stories = data
+                    .GroupBy(p => p.Date.ToString("MMMM"))
+                    .Select(g => new
                     {
-                        expanderContentMonthData.Add(data[j - 1]);
-                    }
+                        Name = g.Key,
+                        Employees = g.Select(p => p)
+                    });
 
-                    expanderContentSplitMonthData.Add(expanderContentMonthData);
-
+                foreach (var item in stories)
+                {
                     expanderData.Add(new ExpanderHistoryModel
                     {
-                        Title = (i + 1) + " " + period,
-                        ExpanderContent = new List<StepometerModel>(expanderContentSplitMonthData[i])
+                        Title = item.Name.ToString(),
+                        ExpanderContent = item.Employees.ToList()
                     });
-                    expanderContentMonthData.Clear();
                 }
 
-                return expanderData;
+                return Task.FromResult(expanderData);
             }
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return new List<ExpanderHistoryModel>();
+                return Task.FromResult<IList<ExpanderHistoryModel>>(new List<ExpanderHistoryModel>());
             }
         }
 

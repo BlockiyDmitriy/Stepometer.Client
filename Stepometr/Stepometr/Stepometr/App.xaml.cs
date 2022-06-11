@@ -26,7 +26,7 @@ namespace Stepometer
         private void RegisterDependencies()
         {
             DependencyResolver.Register<StepometerService>();
-            DependencyResolver.Register<HistoryMockService>();
+            DependencyResolver.Register<HistoryService>();
             DependencyResolver.Register<FriendsMockService>();
             DependencyResolver.Register<AchieveMockService>();
             DependencyResolver.Register<DBService>();

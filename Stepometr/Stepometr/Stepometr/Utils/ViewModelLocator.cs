@@ -14,8 +14,8 @@ namespace Stepometer.Utils
         public static LoginViewModel LoginViewModel { get; set; } = new LoginViewModel(DependencyResolver.Get<ILogService>(), DependencyResolver.Get<ILoginService>());
         public static CreateAccountViewModel CreateAccountViewModel { get; set; } = new CreateAccountViewModel(DependencyResolver.Get<ILogService>(), DependencyResolver.Get<ILoginService>());
         public static StepometerViewModel StepometerViewModel { get; set; } = new StepometerViewModel(DependencyResolver.Get<IStepometerService>(), DependencyResolver.Get<ILogService>());
-        public static HistoryViewModel HistoryViewModel { get; set; } = new HistoryViewModel(DependencyResolver.Get<HistoryMockService>(), DependencyResolver.Get<ILogService>());
+        public static HistoryViewModel HistoryViewModel { get; set; } = new HistoryViewModel(DependencyResolver.Get<HistoryService>(), DependencyResolver.Get<ILogService>());
         public static FriendsViewModel FriendsViewModel { get; set; } = new FriendsViewModel(DependencyResolver.Get<FriendsMockService>());
-        public static AchieveViewModel AchieveViewModel { get; set; } = new AchieveViewModel(DependencyResolver.Get<AchieveMockService>(), DependencyResolver.Get<StepometerMockService>());
+        public static AchieveViewModel AchieveViewModel { get; set; } = new AchieveViewModel(DependencyResolver.Get<AchieveMockService>(), DependencyResolver.Get<IStepometerService>());
     }
 }

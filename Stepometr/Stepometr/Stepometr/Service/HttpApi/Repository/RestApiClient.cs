@@ -31,6 +31,7 @@ namespace Stepometer.Service.HttpApi.Repository
         {
             try
             {
+                _baseUrlStringBuilder = new StringBuilder(Constants.Constants.BaseUrl);
                 var response = await HttpClient.GetAsync(_baseUrlStringBuilder.Append(controllerUrl).ToString());
 
                 await _logService.TrackResponseAsync(response);
