@@ -31,37 +31,23 @@ namespace Stepometer.Service.HttpApi.ConvertService
 
             _dbService = DependencyResolver.Get<IDBService>();
         }
-        public async Task<IList<StepometerModel>> GetHistoryData(int amountDayInYear)
+        public async Task<AvgHistoryWebModel> GetHistoryData()
         {
             try
             {
                 var result = await _avgHistoryApi.GetDataAsync(Constants.Constants.GetHistory);
                 var data = result.FirstOrDefault();
 
-                IList<StepometerModel> resultData = new List<StepometerModel>();
-                
-                foreach (var item in data.AvgDataStepsPerDay)
-                {
-                    resultData.Add(new StepometerModel
-                    {
-                        Steps = Convert.ToInt32(item.Steps),
-                        Date = item.Date,
-                        Calories = item.Calories,
-                        Distance = item.Distance,
-                        Speed = item.Speed
-                    });
-                }
-
-                return resultData;
+                return data;
             }
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return new List<StepometerModel>() { new StepometerModel() };
+                return new AvgHistoryWebModel();
             }
         }
 
-        public async Task<IList<HistoryUserParamWebModel>> GetHistoryData()
+        public async Task<IList<HistoryUserParamWebModel>> GetHistoryUserParamData()
         {
             try
             {

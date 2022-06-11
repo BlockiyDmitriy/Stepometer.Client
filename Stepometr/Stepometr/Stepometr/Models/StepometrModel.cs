@@ -9,7 +9,7 @@ namespace Stepometer.Models
         public int Steps { get; set; } = 0;
         public double Duration { get; set; } = 0.0;
         public DateTime Date { get; set; } = new DateTime();
-        public int Distance { get; set; } = 0;
+        public double Distance { get; set; } = 0.0;
         public int Calories { get; set; } = 0;
         public double Speed { get; set; } = 0.0;
         public DateTimeOffset LastActivityDate { get; set; } = new DateTimeOffset();

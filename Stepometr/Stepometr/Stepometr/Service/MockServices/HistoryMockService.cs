@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Stepometer.Service.MockServices
 {
-    public class HistoryMockService : IHistoryService
+    public class HistoryMockService
     {
-        public async Task<IList<StepometerModel>> GetHistoryData(int amountDayInYear)
+        public async Task<IList<StepometerModel>> GetHistoryData()
         {
             IList<StepometerModel> resultData = new List<StepometerModel>();
-            for (int i = 0; i < amountDayInYear; i++)
+            for (int i = 0; i < 200; i++)
             {
                 resultData.Add(new StepometerModel
                 {
@@ -26,7 +26,7 @@ namespace Stepometer.Service.MockServices
             return resultData;
         }
 
-        public Task<IList<HistoryUserParamWebModel>> GetHistoryData()
+        public Task<IList<HistoryUserParamWebModel>> GetHistoryUserParamData()
         {
             IList<HistoryUserParamWebModel> result = new List<HistoryUserParamWebModel>();
             return Task.FromResult(result);

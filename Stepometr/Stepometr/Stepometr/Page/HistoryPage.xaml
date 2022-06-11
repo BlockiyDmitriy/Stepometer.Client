@@ -106,7 +106,7 @@
                     <views:HistoryContentView
                         Grid.Column="0"
                         Grid.Row="0"
-                        Items="{Binding Data}"
+                        Items="{Binding PeriodAvgData}"
                         UnusedSpace="{Binding Source={x:Reference View}, Path=VisibleContentViewHeight}" />
                     <Frame
                         Grid.Row="1"

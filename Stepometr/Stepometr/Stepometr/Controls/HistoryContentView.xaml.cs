@@ -54,8 +54,8 @@ namespace Stepometer.Controls
         #region Items Property
 
         public static readonly BindableProperty ItemsProperty = BindableProperty.Create(
-            nameof(Items),
-            typeof(IEnumerable<StepometerModel>),
+            nameof(Item),
+            typeof(AvgPeriodDataModel),
             typeof(HistoryContentView),
             propertyChanged: OnItemsPropertyChanged);
 
@@ -68,24 +68,18 @@ namespace Stepometer.Controls
 
             if (newvalue == null)
             {
-                view.PropertiesDataReset();
                 return;
             }
 
-            if (newvalue is IEnumerable<StepometerModel>)
+            if (newvalue is AvgPeriodDataModel)
             {
                 view.UpdateData();
             }
-
-            if (newvalue is ObservableCollection<StepometerModel> observableCollection)
-            {
-                observableCollection.CollectionChanged += (sender, args) => view.UpdateData();
-            }
         }
 
-        public IEnumerable<StepometerModel> Items
+        public AvgPeriodDataModel Item
         {
-            get => (IEnumerable<StepometerModel>) GetValue(ItemsProperty);
+            get => (AvgPeriodDataModel) GetValue(ItemsProperty);
             set => SetValue(ItemsProperty, value);
         }
 
@@ -93,10 +87,10 @@ namespace Stepometer.Controls
 
         #region Properties
 
-        public long AverageSteps { get; set; }
-        public long AverageDistance { get; set; }
-        public long AverageCalories { get; set; }
-        public long AverageSpeed { get; set; }
+        public double AverageSteps { get; set; }
+        public double AverageDistance { get; set; }
+        public double AverageCalories { get; set; }
+        public double AverageSpeed { get; set; }
         public DateTime AverageTimeActivity { get; set; }
 
         #endregion
@@ -119,24 +113,15 @@ namespace Stepometer.Controls
 
         private void UpdateData()
         {
-            if (!Items.Any())
+            if (Item == null)
             {
-                PropertiesDataReset();
                 return;
             }
 
-            AverageSteps = (long) Items.Average(m => m.Steps);
-            AverageDistance = (long) Items.Average(m => m.Distance);
-            AverageCalories = (long) Items.Average(m => m.Calories);
-            AverageSpeed = (long) Items.Average(m => m.Speed);
-        }
-
-        private void PropertiesDataReset()
-        {
-            AverageSteps = 0;
-            AverageDistance = 0;
-            AverageCalories = 0;
-            AverageSpeed = 0;
+            AverageSteps = Item.AvgSteps;
+            AverageDistance = Item.AvgDistance;
+            AverageCalories = Item.AvgCalories;
+            AverageSpeed = Item.AvgSpeed;
         }
     }
 }

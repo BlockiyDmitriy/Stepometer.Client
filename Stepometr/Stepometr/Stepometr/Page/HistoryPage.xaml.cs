@@ -23,26 +23,7 @@ namespace Stepometer.Page
         {
             base.OnAppearing();
 
-
-            var amountDay = GetAmountDayInYear();
-
-            Task.Run( async () => await _viewModel.Init(amountDay));
-        }
-        private short GetAmountDayInYear()
-        {
-            if (!DateTime.IsLeapYear(DateTime.Today.Year) &&
-                DateTime.Now.Month > 1)
-            {
-                return 365;
-            }
-
-            if (!DateTime.IsLeapYear(DateTime.Today.Year - 1) &&
-                DateTime.Now.Month == 1)
-            {
-                return 365;
-            }
-
-            return 366;
+            Task.Run( async () => await _viewModel.Init());
         }
         protected override void OnSizeAllocated(double width, double height)
         {

@@ -6,7 +6,7 @@ namespace Stepometer.Service.HttpApi.ConvertService.Contracts
 {
     public interface IHistoryService
     {
-        public Task<IList<StepometerModel>> GetHistoryData(int amountDayInYear);
-        public Task<IList<HistoryUserParamWebModel>> GetHistoryData();
+        public Task<AvgHistoryWebModel> GetHistoryData();
+        public Task<IList<HistoryUserParamWebModel>> GetHistoryUserParamData();
     }
 }

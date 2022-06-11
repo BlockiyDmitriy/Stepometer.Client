@@ -26,6 +26,7 @@ namespace Stepometer.ViewModel
         private IHistoryService _historyService;
 
         public ObservableRangeCollection<StepometerModel> Data { get; set; }
+        public AvgPeriodDataModel PeriodAvgData { get; set; }
         public ObservableRangeCollection<ChartEntry> Entries { get; set; }
         public ObservableRangeCollection<ExpanderHistoryModel> ExpanderHistory { get; set; }
         public ICommand SegmentChangedCommand { get; }
@@ -38,6 +39,7 @@ namespace Stepometer.ViewModel
             _logService = logService;
             _historyService = historyService;
 
+            PeriodAvgData = new AvgPeriodDataModel();
             Data = new ObservableRangeCollection<StepometerModel>();
             Entries = new ObservableRangeCollection<ChartEntry>();
             ExpanderHistory = new ObservableRangeCollection<ExpanderHistoryModel>();
@@ -47,23 +49,23 @@ namespace Stepometer.ViewModel
 
         }
 
-        public Task Init(int amountDay)
+        public Task Init()
         {
-            SegmentLoader.Load(async ()=> await InitFillAllData(amountDay));
+            SegmentLoader.Load(async ()=> await InitFillAllData());
 
             return Task.CompletedTask;
         }
 
         public async Task OnSegmentChanged() => await PrintGraphExpander();
 
-        private static (EnumTypePeriod period, byte ValuePoint, byte ValueCountRootExpander)
+        private static (EnumTypePeriod period, byte ValuePoint)
             ConvertSegmentToNecessaryData(byte segment) =>
             segment switch
             {
-                0 => (EnumTypePeriod.Week, 7, 1),
-                1 => (EnumTypePeriod.Month, 4, 1),
-                2 => (EnumTypePeriod.HalfYear, 6, 6),
-                3 => (EnumTypePeriod.Year, 12, 12),
+                0 => (EnumTypePeriod.Week, 7),
+                1 => (EnumTypePeriod.Month, 4),
+                2 => (EnumTypePeriod.HalfYear, 6),
+                3 => (EnumTypePeriod.Year, 12),
                 _ => throw new ArgumentException()
             };
 
@@ -75,9 +77,9 @@ namespace Stepometer.ViewModel
         {
             try
             {
-                var (period, valuePoint, valueCountRootExpander) = ConvertSegmentToNecessaryData(SelectedSegment);
+                var (period, valuePoint) = ConvertSegmentToNecessaryData(SelectedSegment);
 
-                var tempPeriod = period == EnumTypePeriod.Week ? "Week" : "Month";
+                var tempPeriod = period == EnumTypePeriod.Week ? EnumTypePeriod.Week : EnumTypePeriod.Month;
                 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
@@ -86,13 +88,17 @@ namespace Stepometer.ViewModel
                     ExpanderHistory?.Clear();
                 });
 
-                var data = await PrepareGraphStat(valuePoint);
+                var historyData = await _historyService.GetHistoryData();
+
+                var avgPeriod = await GetPeriodData(historyData, tempPeriod);
+                var data = await PrepareGraphStat(historyData);
                 var entries = await CreateGraphData(data);
-                var expanderData = await PrepareExpanderData(_allDataStat, valueCountRootExpander, tempPeriod);
+                var expanderData = await PrepareExpanderData(data);
 
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     Data.AddRange(data);
+                    PeriodAvgData = avgPeriod;
                     Entries.AddRange(entries);
                     ExpanderHistory.AddRange(expanderData);
                 });
@@ -103,12 +109,52 @@ namespace Stepometer.ViewModel
             }
         }
 
+        private Task<AvgPeriodDataModel> GetPeriodData(AvgHistoryWebModel historyData, EnumTypePeriod period)
+        {
+            try
+            {
+                var avgStepometerModel = new AvgPeriodDataModel();
+
+                switch (period)
+                {
+                    case EnumTypePeriod.Week:
+                        {
+                            avgStepometerModel = historyData.AvgDataStepsWeek;
+                        }
+                        break;
+                    case EnumTypePeriod.Month:
+                        {
+                            avgStepometerModel = historyData.AvgDataStepsMonth;
+                        }
+                        break;
+                    case EnumTypePeriod.HalfYear:
+                        {
+                            avgStepometerModel = historyData.AvgDataStepsHalfYear;
+                        }
+                        break;
+                    case EnumTypePeriod.Year:
+                        {
+                            avgStepometerModel = historyData.AvgDataStepsYear;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                return Task.FromResult(avgStepometerModel);
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                return Task.FromResult(new AvgPeriodDataModel());
+            }
+        }
+
         private async Task OpenAchievePage()
         {
             await Shell.Current.GoToAsync($"{nameof(AchievePage)}");
         }
 
-        public async Task InitFillAllData(int amountDayInYear)
+        public async Task InitFillAllData()
         {
             try
             {
@@ -118,10 +164,6 @@ namespace Stepometer.ViewModel
                 }
 
                 IsBusy = true;
-
-                var historyData = await _historyService.GetHistoryData(amountDayInYear);
-
-                _allDataStat = historyData;
                 
                 await PrintGraphExpander();
 
@@ -140,32 +182,11 @@ namespace Stepometer.ViewModel
         /// <param name="valueCountRootExpander">Amount root expander</param>
         /// <param name="period">Selected period</param>
         /// <returns>Return data for expander</returns>
-        private Task<IList<ExpanderHistoryModel>> PrepareExpanderData(IList<StepometerModel> data,
-            byte valueCountRootExpander, string period)
+        private Task<IList<ExpanderHistoryModel>> PrepareExpanderData(IList<StepometerModel> data)
         {
             try
             {
                 IList<ExpanderHistoryModel> expanderData = new List<ExpanderHistoryModel>();
-
-                //for (int i = 0; i < valueCountRootExpander; i++)
-                //{
-                //    var firstTimeInList = data[i];
-                //    var daysInPeriod = period == "Week" ? 7 : DateTime.DaysInMonth(firstTimeInList.Date.Year, firstTimeInList.Date.Month);
-
-                //    for (int j = 1; j < daysInPeriod + 1; j++)
-                //    {
-                //        expanderContentMonthData.Add(data[j - 1]);
-                //    }
-
-                //    expanderContentSplitMonthData.Add(expanderContentMonthData);
-
-                //    expanderData.Add(new ExpanderHistoryModel
-                //    {
-                //        Title = (i + 1) + " " + period,
-                //        ExpanderContent = new List<StepometerModel>(expanderContentSplitMonthData[i])
-                //    });
-                //    expanderContentMonthData.Clear();
-                //}
 
                 var stories = data
                     .GroupBy(p => p.Date.ToString("MMMM"))
@@ -198,13 +219,25 @@ namespace Stepometer.ViewModel
         /// </summary>
         /// <param name="valuePoint">Amount point to graph</param>
         /// <returns>Return prepare data for graph</returns>
-        private async Task<IList<StepometerModel>> PrepareGraphStat(byte valuePoint)
+        private async Task<IList<StepometerModel>> PrepareGraphStat(AvgHistoryWebModel historyData)
         {
             try
             {
-                var historyData = await _historyService.GetHistoryData(valuePoint);
+                var stepometerListData = new List<StepometerModel>();
 
-                return historyData;
+                foreach (var item in historyData.AvgDataStepsPerDay)
+                {
+                    stepometerListData.Add(new StepometerModel
+                    {
+                        Steps = Convert.ToInt32(item.Steps),
+                        Date = item.Date,
+                        Calories = item.Calories,
+                        Distance = item.Distance,
+                        Speed = item.Speed
+                    });
+                }
+
+                return stepometerListData;
             }
             catch (Exception e)
             {
@@ -223,6 +256,7 @@ namespace Stepometer.ViewModel
             try
             {
                 IList<ChartEntry> entries = new List<ChartEntry>();
+               
                 foreach (var model in data)
                 {
                     entries.Add(new ChartEntry(model.Steps)
