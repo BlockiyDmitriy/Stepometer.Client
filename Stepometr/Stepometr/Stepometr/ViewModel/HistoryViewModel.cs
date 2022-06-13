@@ -49,7 +49,7 @@ namespace Stepometer.ViewModel
 
         public Task Init()
         {
-            SegmentLoader.Load(async ()=> await InitFillAllData());
+            SegmentLoader.Load(async () => await InitFillAllData());
 
             return Task.CompletedTask;
         }
@@ -78,7 +78,7 @@ namespace Stepometer.ViewModel
                 var (period, valuePoint) = ConvertSegmentToNecessaryData(SelectedSegment);
 
                 var tempPeriod = period == EnumTypePeriod.Week ? EnumTypePeriod.Week : EnumTypePeriod.Month;
-                
+
                 await MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     Entries?.Clear();
@@ -88,7 +88,7 @@ namespace Stepometer.ViewModel
                 var historyData = await _historyService.GetHistoryData();
 
                 var avgPeriod = await GetPeriodData(historyData, tempPeriod);
-                var data = await PrepareGraphStat(historyData);
+                var data = await PrepareGraphStat(historyData, tempPeriod);
                 var entries = await CreateGraphData(data);
                 var expanderData = await PrepareExpanderData(data);
 
@@ -160,7 +160,7 @@ namespace Stepometer.ViewModel
                 }
 
                 IsBusy = true;
-                
+
                 await PrintGraphExpander();
 
                 IsBusy = false;
@@ -215,30 +215,58 @@ namespace Stepometer.ViewModel
         /// </summary>
         /// <param name="valuePoint">Amount point to graph</param>
         /// <returns>Return prepare data for graph</returns>
-        private async Task<IList<StepometerModel>> PrepareGraphStat(AvgHistoryWebModel historyData)
+        private Task<IList<StepometerModel>> PrepareGraphStat(AvgHistoryWebModel historyData, EnumTypePeriod period)
         {
             try
             {
                 var stepometerListData = new List<StepometerModel>();
 
-                foreach (var item in historyData.AvgDataStepsPerDay)
+                var stories = historyData.AvgDataStepsPerDay
+                   .GroupBy(p => p.Date)
+                   .Select(g => new
+                   {
+                       Name = g.Key,
+                       Employees = g.Select(p => p)
+                   });
+
+                DateTime currentDateTime = DateTime.Now;
+
+                var reversStories = stories.Reverse();
+
+                var periodCount = 0;
+                foreach (var item in reversStories)
                 {
-                    stepometerListData.Add(new StepometerModel
+                    var daysInPeriod = period == EnumTypePeriod.Week ? 7 : DateTime.DaysInMonth(item.Name.Date.Year, item.Name.Month);
+
+                    if (periodCount < daysInPeriod)
                     {
-                        Steps = Convert.ToInt32(item.Steps),
-                        Date = item.Date,
-                        Calories = item.Calories,
-                        Distance = item.Distance,
-                        Speed = item.Speed
-                    });
+                        if (item.Name.Date == currentDateTime.AddDays(-periodCount).Date)
+                        {
+                            stepometerListData.Add(new StepometerModel
+                            {
+                                Steps = Convert.ToInt32(item.Employees.Average(s => s.Steps)),
+                                Date = item.Name.Date
+                            });
+                        }
+                        else
+                        {
+                            stepometerListData.Add(new StepometerModel
+                            {
+                                Steps = 0,
+                                Date = currentDateTime.AddDays(-periodCount)
+                            });
+                        }
+                    }
+
+                    periodCount++;
                 }
 
-                return stepometerListData;
+                return Task.FromResult<IList<StepometerModel>>(stepometerListData);
             }
             catch (Exception e)
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
-                return new List<StepometerModel>();
+                return Task.FromResult<IList<StepometerModel>>(new List<StepometerModel>());
             }
         }
 
@@ -252,13 +280,13 @@ namespace Stepometer.ViewModel
             try
             {
                 IList<ChartEntry> entries = new List<ChartEntry>();
-               
+
                 foreach (var model in data)
                 {
                     entries.Add(new ChartEntry(model.Steps)
                     {
                         Color = SKColor.Parse("#db7900"),
-                        Label = model.Date.ToShortDateString(),
+                        Label = model.Date.ToString("d.M"),
                         TextColor = SKColors.Yellow,
                         ValueLabelColor = SKColors.White,
                     });
