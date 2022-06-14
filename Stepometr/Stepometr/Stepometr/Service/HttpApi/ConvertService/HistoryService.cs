@@ -36,7 +36,17 @@ namespace Stepometer.Service.HttpApi.ConvertService
             try
             {
                 var result = await _avgHistoryApi.GetDataAsync(Constants.Constants.GetHistory);
-                var data = result.FirstOrDefault();
+
+                var data = new AvgHistoryWebModel();
+
+                if (result != null)
+                {
+                    data = await _dbService.SetHistoryDataAsync(result.FirstOrDefault());
+                }
+                else
+                {
+                    data = await _dbService.GetHistoryDataAsync();
+                }
 
                 return data;
             }

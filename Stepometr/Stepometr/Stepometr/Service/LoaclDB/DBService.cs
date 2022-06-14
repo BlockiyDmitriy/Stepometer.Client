@@ -14,6 +14,7 @@ namespace Stepometer.Service.LoaclDB
     {
         private readonly LiteDatabase _liteDatabase;
         private readonly ILiteCollection<StepometerModel> _stepometerModel;
+        private readonly ILiteCollection<AvgHistoryWebModel> _avgHistoryCollection;
         private readonly ILiteCollection<ActivityDate> _activityDateCollection;
 
         private ILogService _logService { get; set; }
@@ -22,6 +23,7 @@ namespace Stepometer.Service.LoaclDB
         {
             _liteDatabase = new LiteDatabase(DBHelper.DBPath);
             _stepometerModel = _liteDatabase.GetCollection<StepometerModel>(DBHelper.StepometerCollection);
+            _avgHistoryCollection = _liteDatabase.GetCollection<AvgHistoryWebModel>(DBHelper.AvgHistoryCollection);
             _activityDateCollection = _liteDatabase.GetCollection<ActivityDate>(DBHelper.ActivityDateId);
 
             _logService = DependencyResolver.Get<ILogService>();
@@ -45,7 +47,6 @@ namespace Stepometer.Service.LoaclDB
         {
             try
             {
-                var t = _stepometerModel.FindAll();
                 var data = _stepometerModel.FindAll().LastOrDefault();
                 return Task.FromResult(data);
             }
@@ -72,6 +73,53 @@ namespace Stepometer.Service.LoaclDB
             {
                 _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
                 return Task.FromResult(stepometerModel ?? new StepometerModel());
+            }
+        }
+
+        public Task<AvgHistoryWebModel> SetHistoryDataAsync(AvgHistoryWebModel avgHistoryModel)
+        {
+            try
+            {
+                _avgHistoryCollection.Insert(avgHistoryModel);
+                return Task.FromResult(avgHistoryModel);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return Task.FromResult(avgHistoryModel ?? new AvgHistoryWebModel());
+            }
+        }
+
+        public Task<AvgHistoryWebModel> GetHistoryDataAsync()
+        {
+            try
+            {
+                var data = _avgHistoryCollection.FindAll().LastOrDefault();
+                return Task.FromResult(data);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                return Task.FromResult(new AvgHistoryWebModel());
+            }
+        }
+
+        public Task<AvgHistoryWebModel> UpdateHistoryDataAsync(AvgHistoryWebModel avgHistoryModel)
+        {
+            try
+            {
+                var result = _avgHistoryCollection.Update(avgHistoryModel);
+                if (!result)
+                {
+                    _logService.Log("Local db. Document not found");
+                    _avgHistoryCollection.Insert(avgHistoryModel);
+                }
+                return Task.FromResult(avgHistoryModel);
+            }
+            catch (Exception e)
+            {
+                _logService.TrackException(e, MethodBase.GetCurrentMethod()?.Name);
+                return Task.FromResult(avgHistoryModel ?? new AvgHistoryWebModel());
             }
         }
 

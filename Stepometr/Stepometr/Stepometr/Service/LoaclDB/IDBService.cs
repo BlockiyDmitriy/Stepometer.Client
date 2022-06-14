@@ -14,6 +14,14 @@ namespace Stepometer.Service.LoaclDB
 
         #endregion
 
+        #region History
+
+        Task<AvgHistoryWebModel> SetHistoryDataAsync(AvgHistoryWebModel avgHistoryModel);
+        Task<AvgHistoryWebModel> GetHistoryDataAsync();
+        Task<AvgHistoryWebModel> UpdateHistoryDataAsync(AvgHistoryWebModel avgHistoryModel);
+
+        #endregion
+
         #region Last Activity Date
         Task<DateTimeOffset> GetLastActivityDate();
         Task UpdateLastActivityDate(DateTimeOffset date);
